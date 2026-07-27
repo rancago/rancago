@@ -18,16 +18,16 @@ SOLID Principles · IoC Service Container · Multi-API Transport · pgvector Sem
 
 > **R**esilient, **A**gnostic, & **N**ative **C**lean-**A**rchitecture **G**O Framework
 
-Dirancang untuk tangguh di bawah beban (*resilient*), bebas dari ketergantungan transport tertentu (*agnostic* — REST + gRPC + WebSocket dari satu definisi service), dan sepenuhnya idiomatik terhadap pola clean architecture di Go (*native*).
+Dirancang untuk tangguh di bawah beban (*resilient*), bebas dari ketergantungan transport tertentu (*agnostic* - REST + gRPC + WebSocket dari satu definisi service), dan sepenuhnya idiomatik terhadap pola clean architecture di Go (*native*).
 
 **Akar Sunda / lokal:**
 
 | Kata | Makna |
 |---|---|
-| **Rancagé** | *Kecakapan, keterampilan, dan kerapian dalam merancang sesuatu secara bertahap dan terstruktur* — mencerminkan cara Rancago menegakkan prinsip SOLID dan arsitektur hexagonal langkah demi langkah. |
-| **Ranca** | *Daerah perairan/lahan luas yang subur* — melambangkan ekosistem framework yang kaya fitur bawaan: pgvector, Redis, MinIO, Google Drive, Meet, Calendar, OAuth, RBAC, semuanya tumbuh dari satu fondasi. |
+| **Rancagé** | *Kecakapan, keterampilan, dan kerapian dalam merancang sesuatu secara bertahap dan terstruktur* - mencerminkan cara Rancago menegakkan prinsip SOLID dan arsitektur hexagonal langkah demi langkah. |
+| **Ranca** | *Daerah perairan/lahan luas yang subur* - melambangkan ekosistem framework yang kaya fitur bawaan: pgvector, Redis, MinIO, Google Drive, Meet, Calendar, OAuth, RBAC, semuanya tumbuh dari satu fondasi. |
 
-Namanya sekaligus akronim teknis dan penghormatan terhadap budaya lokal — framework yang dibangun dengan kecakapan (*rancagé*) dan dirancang tumbuh seperti ekosistem subur (*ranca*).
+Namanya sekaligus akronim teknis dan penghormatan terhadap budaya lokal - framework yang dibangun dengan kecakapan (*rancagé*) dan dirancang tumbuh seperti ekosistem subur (*ranca*).
 
 ---
 

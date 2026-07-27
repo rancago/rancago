@@ -3,8 +3,9 @@
 *.out
 dist/
 
-# rancago-cli is its own separate repo
+# Sub-repos — each has its own git repo
 rancago-cli/
+rancago-install/
 
 # Go
 vendor/

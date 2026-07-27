@@ -4,7 +4,7 @@
 
 [![Go Version](https://img.shields.io/badge/Go-1.23%2B-00ADD8?style=flat-square&logo=go)](https://go.dev)
 [![Module](https://img.shields.io/badge/module-github.com%2Francago%2Fframework-blue?style=flat-square)](https://github.com/rancago/rancago)
-[![License](https://img.shields.io/badge/license-Proprietary-red?style=flat-square)](LICENSE)
+[![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)](LICENSE)
 
 SOLID Principles · IoC Service Container · Multi-API Transport · pgvector Semantic Search · Redis WebSocket Hub · Google Ecosystem · OAuth Socialite
 
@@ -24,10 +24,10 @@ Built to be resilient under load, transport-agnostic (REST + gRPC + WebSocket fr
 
 | Word | Meaning |
 |---|---|
-| **Rancagé** | *Skilled, precise, and structured craftsmanship* — reflects how Rancago enforces SOLID principles and clean hexagonal architecture step by step. |
-| **Ranca** | *A fertile, expansive wetland ecosystem* — mirrors the rich built-in feature set: pgvector, Redis, MinIO, Google Drive, Meet, Calendar, OAuth, RBAC, all growing from one foundation. |
+| **Rancagé** | *Skilled, precise, and structured craftsmanship* - reflects how Rancago enforces SOLID principles and clean hexagonal architecture step by step. |
+| **Ranca** | *A fertile, expansive wetland ecosystem* - mirrors the rich built-in feature set: pgvector, Redis, MinIO, Google Drive, Meet, Calendar, OAuth, RBAC, all growing from one foundation. |
 
-The name is both a technical acronym and a tribute to local culture — a framework engineered with care (*rancagé*) and designed to grow like a fertile ecosystem (*ranca*).
+The name is both a technical acronym and a tribute to local culture - a framework engineered with care (*rancagé*) and designed to grow like a fertile ecosystem (*ranca*).
 
 ---
 
@@ -439,8 +439,10 @@ UTILITIES
 
 ## License
 
-Proprietary - Muhammad Ikhwan Fathulloh © 2026. Rancago Framework 1.0.0.
+MIT License — Copyright (c) 2026 [Muhammad Ikhwan Fathulloh](https://github.com/ikhwanfathulloh)
+
+See [LICENSE](LICENSE) for full text.
 
 ---
 
-> **Rancago**: Go + Laravel productivity - idiomatic, typed, and built to scale.
+> **RANCAGO**: Go + Laravel productivity — idiomatic, typed, and built to scale.
