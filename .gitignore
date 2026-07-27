@@ -3,7 +3,7 @@
 *.out
 dist/
 
-# Sub-repos — each has its own git repo
+# Sub-repos - each has its own git repo
 rancago-cli/
 rancago-install/
 

@@ -54,5 +54,5 @@ func (p *GoogleServiceProvider) Register(c *Container.Container) error {
 	return nil
 }
 
-// Boot is a no-op — all wiring happens in Register.
+// Boot is a no-op - all wiring happens in Register.
 func (p *GoogleServiceProvider) Boot(_ *Container.Container) error { return nil }

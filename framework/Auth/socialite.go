@@ -89,7 +89,7 @@ func (p *GenericOAuthProvider) UserFromToken(_ context.Context, token string) (*
 }
 
 // SocialiteManager manages OAuth driver registration and dispatching.
-// Add a new provider via RegisterDriver — OCP compliant, no framework code changes.
+// Add a new provider via RegisterDriver - OCP compliant, no framework code changes.
 type SocialiteManager struct {
 	mu        sync.RWMutex
 	drivers   map[string]Contracts.AuthProvider

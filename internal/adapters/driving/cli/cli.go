@@ -91,7 +91,7 @@ func RunCLI() int {
 
 func printUsage() {
 	fmt.Println(rancagoBanner())
-	fmt.Println("Rancago Framework CLI — Clean Hexagonal Architecture Toolkit")
+	fmt.Println("Rancago Framework CLI - Clean Hexagonal Architecture Toolkit")
 	fmt.Println()
 	fmt.Println("Usage:")
 	fmt.Println("  rancago [command] [flags] [args]")

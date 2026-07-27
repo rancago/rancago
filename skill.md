@@ -1,7 +1,7 @@
-# 🧠 Rancago Framework — Skill Matrix & Vibe Code Guide
+# 🧠 Rancago Framework - Skill Matrix & Vibe Code Guide
 
 > **Vibe Code Philosophy**: Produktif seperti Laravel, idiomatik seperti Go, skala enterprise tanpa ribet.
-> Rancago bukan sekadar framework — ini adalah *state of mind*: **Contracts First, Providers Second, Services Third**.
+> Rancago bukan sekadar framework - ini adalah *state of mind*: **Contracts First, Providers Second, Services Third**.
 
 ---
 
@@ -24,14 +24,14 @@
 
 ---
 
-## 🏗 Architecture Vibe Code — The Rancago Way
+## 🏗 Architecture Vibe Code - The Rancago Way
 
 ### The Golden Trinity: Contracts → Providers → Services
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │  1. CONTRACTS (app/Contracts/*.go)                           │
-│     └── Define ALL interfaces FIRST — ISP & DIP compliance    │
+│     └── Define ALL interfaces FIRST - ISP & DIP compliance    │
 ├─────────────────────────────────────────────────────────────┤
 │  2. PROVIDERS (app/Providers/*.go)                           │
 │     └── Register(Bind/Singleton) ke Container → Boot() wire   │
@@ -41,29 +41,29 @@
 └─────────────────────────────────────────────────────────────┘
 ```
 
-### Rule #1 — Contracts Always Come First
+### Rule #1 - Contracts Always Come First
 
 > ❌ **Bad Vibes**: Struct concrete di-import langsung
 > ✅ **Good Vibes**: Struct menerima interface via constructor injection
 
 ```go
-// ❌ Bad — ketergantungan langsung ke MinIO
+// ❌ Bad - ketergantungan langsung ke MinIO
 type FileService struct {
     Minio *minio.Client
 }
 
-// ✅ Good — depend ke abstraksi, siap swap driver apapun
+// ✅ Good - depend ke abstraksi, siap swap driver apapun
 type FileService struct {
     Storage Contracts.StorageDriver
 }
 ```
 
-### Rule #2 — ServiceProvider is The Only Registration Point
+### Rule #2 - ServiceProvider is The Only Registration Point
 
 > Setiap modul baru WAJIB punya ServiceProvider. Jangan scatter bind di bootstrap.
 
 ```go
-// app/Providers/PaymentServiceProvider.go — POLA WAJIB
+// app/Providers/PaymentServiceProvider.go - POLA WAJIB
 type PaymentServiceProvider struct{}
 
 func (p *PaymentServiceProvider) Register(c *Container.Container) error {
@@ -90,25 +90,25 @@ func (a *Application) RegisterCore() {
 }
 ```
 
-### Rule #3 — Container Naming Convention
+### Rule #3 - Container Naming Convention
 
 | Tipe Binding | Format Nama | Contoh (Actual di Codebase) |
 |---|---|---|
 | **Singleton Service** | `service.{name}` | `service.notification` |
-| **Manager** | `{domain}` (singular) | `storage` (bukan storage.mgr — lihat StorageServiceProvider) |
+| **Manager** | `{domain}` (singular) | `storage` (bukan storage.mgr - lihat StorageServiceProvider) |
 | **Driver Instance** | `{domain}.{driver}` | `storage.minio` (pattern via `Disk(name)` call) |
 | **Config** | `config` | `config` (Instance, bound di `bootstrap.New()`) |
 | **Contract Alias** | `Contracts.{InterfaceName}` | `Contracts.NotificationService`, `Contracts.StorageDriver` |
 | **Type Alias** | `{Package}.{TypeName}` | `Storage.StorageManager` (alias untuk concrete struct) |
 | **Infra** | `{infra}` | `redis`, `ws.hub` |
 
-> ⚠️ **Actual Binding Reference**: Lihat [StorageServiceProvider.go](file:///d:/Rancago/app/Providers/StorageServiceProvider.go#L17-L38) — key `"storage"` dengan 2 alias: `"Storage.StorageManager"` (concrete type) dan `"Contracts.StorageDriver"` (interface).
+> ⚠️ **Actual Binding Reference**: Lihat [StorageServiceProvider.go](file:///d:/Rancago/app/Providers/StorageServiceProvider.go#L17-L38) - key `"storage"` dengan 2 alias: `"Storage.StorageManager"` (concrete type) dan `"Contracts.StorageDriver"` (interface).
 
 ---
 
 ## 📁 Folder-by-Folder Coding Conventions
 
-### `app/Contracts/` — The Interface Bible
+### `app/Contracts/` - The Interface Bible
 
 > 📜 **RULE**: Semua dependency antar-modul HANYA lewat Contracts. Jangan pernah cross-import concrete struct.
 
@@ -125,7 +125,7 @@ func (a *Application) RegisterCore() {
 
 ---
 
-### `app/Providers/` — Wiring Central
+### `app/Providers/` - Wiring Central
 
 Setiap Provider WAJIB:
 1. Implement `Contracts.ServiceProvider` (2 method: Register + Boot)
@@ -160,14 +160,14 @@ func (p *XxxServiceProvider) Boot(c *Container.Container) error {
 
 ---
 
-### `app/Services/` — Business Logic Utopia
+### `app/Services/` - Business Logic Utopia
 
 > 🚫 **DILARANG**: Import `net/http`, `grpc`, `*websocket.Conn` di Services.
 > Services harus Transport-Agnostic. Logic yang sama bisa dipanggil dari REST, gRPC, WebSocket, CLI, Queue Worker.
 
 **Pola Constructor dengan Dependency Injection**:
 ```go
-// app/Services/NotificationService.go — POLA BENAR
+// app/Services/NotificationService.go - POLA BENAR
 type NotificationService struct {
     redis *Cache.RedisManager
     hub   *WebSocket.Hub
@@ -180,13 +180,13 @@ func NewNotificationService(redis *Cache.RedisManager, hub *WebSocket.Hub) Contr
 
 // ⭐ Semua method terima context.Context parameter pertama
 func (s *NotificationService) Send(ctx context.Context, n *Contracts.Notification) (*Contracts.Notification, error) {
-    // Business logic disini — tidak tahu apakah dipanggil via REST/gRPC/WS
+    // Business logic disini - tidak tahu apakah dipanggil via REST/gRPC/WS
 }
 ```
 
 ---
 
-### `framework/` — The Extracted Core
+### `framework/` - The Extracted Core
 
 Isinya adalah framework reusable yang bisa diekstrak ke module terpisah. Setiap sub-folder di `framework/` mewakili 1 Bounded Context:
 
@@ -203,13 +203,13 @@ Isinya adalah framework reusable yang bisa diekstrak ke module terpisah. Setiap 
 
 ---
 
-### `config/` — Strict Struct Configuration
+### `config/` - Strict Struct Configuration
 
 Tidak ada `map[string]interface{}` di config. Semua typed struct dengan default value yang production-ready di [config.go](file:///d:/Rancago/config/config.go#L84-L185).
 
 ---
 
-### `routes/` — Declarative Route Builder
+### `routes/` - Declarative Route Builder
 
 Router menggunakan pola chaining method dengan middleware string-names. Lihat [routes.go](file:///d:/Rancago/routes/routes.go) untuk pola dasar:
 
@@ -224,7 +224,7 @@ func Api() *Router {
 
 ---
 
-### `cmd/Rancago/commands/` — CLI Generators
+### `cmd/Rancago/commands/` - CLI Generators
 
 Setiap command Cobra punya naming convention:
 - `New{Name}Command() *cobra.Command`
@@ -233,21 +233,21 @@ Setiap command Cobra punya naming convention:
 
 ---
 
-## 🎨 Rancago Design Patterns — Signature Vibe
+## 🎨 Rancago Design Patterns - Signature Vibe
 
-### Pattern #1 — Functional Options Pattern
+### Pattern #1 - Functional Options Pattern
 
 Digunakan di Storage, Calendar, Meet untuk parameter opsional yang readable:
 
 ```go
-// app/Contracts/storage.go — POLA OPSI FUNGSIONAL
+// app/Contracts/storage.go - POLA OPSI FUNGSIONAL
 type StorageOption func(*StorageOptions)
 
 func WithContentType(ct string) StorageOption { ... }
 func WithACL(acl string) StorageOption { ... }
 func WithMetadata(md map[string]string) StorageOption { ... }
 
-// ✅ Usage — super readable, extensible (tambah opsi = tambah 1 fungsi)
+// ✅ Usage - super readable, extensible (tambah opsi = tambah 1 fungsi)
 storage.Put(ctx, "avatar.jpg", file,
     WithContentType("image/jpeg"),
     WithACL("public-read"),
@@ -255,17 +255,17 @@ storage.Put(ctx, "avatar.jpg", file,
 )
 ```
 
-### Pattern #2 — Proxy Driver Pattern
+### Pattern #2 - Proxy Driver Pattern
 
 StorageManager bisa di-wrap menjadi ProxyDriver yang mengimplement StorageDriver interface, sehingga bisa inject ke struct manapun tanpa tahu disk mana yang dipakai:
 
 ```go
-// framework/Storage/manager.go — ProxyDriver Pattern
+// framework/Storage/manager.go - ProxyDriver Pattern
 gdrive := storageMgr.Proxy("google_drive")
 // gdrive TIPE NYA = Contracts.StorageDriver, siap inject!
 ```
 
-### Pattern #3 — Multi-Adapter Transport Pattern
+### Pattern #3 - Multi-Adapter Transport Pattern
 
 1 Service Logic = 3 Endpoint otomatis. Lihat `framework/Transport/NotificationTransport.go`:
 
@@ -278,7 +278,7 @@ NotificationService (app/Services)
 
 TIDAK PERLU duplikat logic. Service hanya 1, adapters yang menyesuaikan format transport.
 
-### Pattern #4 — Plugin Registry (OCP pada Steroid)
+### Pattern #4 - Plugin Registry (OCP pada Steroid)
 
 Contoh di StorageManager dan SocialiteManager:
 ```go
@@ -287,7 +287,7 @@ mgr.RegisterFactory("azure_blob", func(cfg StorageDiskConfig) (StorageDriver, er
     return NewAzureBlobDriver(cfg), nil
 })
 
-// ✅ Langsung pakai — OCP 100% compliant
+// ✅ Langsung pakai - OCP 100% compliant
 disk, _ := mgr.Disk("my_azure_disk")
 ```
 
@@ -313,7 +313,7 @@ disk, _ := mgr.Disk("my_azure_disk")
 // Contoh actual: app/Services/NotificationService.go
 type InMemoryNotificationService struct { /* fields */ }
 
-// Constructor return concrete type — Container yang handle interface binding
+// Constructor return concrete type - Container yang handle interface binding
 func NewNotificationService(redis *Cache.RedisManager, hub *WebSocket.Hub) *InMemoryNotificationService {
     return &InMemoryNotificationService{redis: redis, wsHub: hub}
 }
@@ -330,12 +330,12 @@ c.Singleton("service.notification", func(c *Container.Container) (interface{}, e
 })
 c.Alias("service.notification", "Contracts.NotificationService") // ⭐ Penting!
 
-// ✅ Di Service Provider Constructor — bisa return concrete, nanti Container terima
-// app/Providers/StorageServiceProvider.go — actual:
+// ✅ Di Service Provider Constructor - bisa return concrete, nanti Container terima
+// app/Providers/StorageServiceProvider.go - actual:
 func NewStorageServiceProvider() *StorageServiceProvider {
     return &StorageServiceProvider{}
 }
-// RegisterProviders() di app.go menerima Contracts.ServiceProvider — struct otomatis satisfy karena punya Register() + Boot()
+// RegisterProviders() di app.go menerima Contracts.ServiceProvider - struct otomatis satisfy karena punya Register() + Boot()
 
 ### Error Handling
 
@@ -359,7 +359,7 @@ if err := p.Register(c); err != nil {
 // ✅ Correct
 func (s *Service) ProcessOrder(ctx context.Context, orderID string) error { ... }
 
-// ❌ Wrong — tidak ada context
+// ❌ Wrong - tidak ada context
 func (s *Service) ProcessOrder(orderID string) error { ... }
 ```
 
@@ -373,19 +373,19 @@ func (s *Service) ProcessOrder(orderID string) error { ... }
 | 2 | **Service import struct concrete langsung** | Coupling tinggi, susah refactor | Depend ke `Contracts.*` interface |
 | 3 | **Business logic di HTTP Handler** | Tidak bisa dipakai gRPC/WS | Pindahkan ke `app/Services/` |
 | 4 | **Bind tanpa Alias ke Contract** | Tidak bisa resolve via interface name | Selalu `c.Alias("service.xxx", "Contracts.XxxService")` |
-| 5 | **Driver registration di bootstrap** | OCP violation — harus ubah kernel | Register via Provider.Boot() |
+| 5 | **Driver registration di bootstrap** | OCP violation - harus ubah kernel | Register via Provider.Boot() |
 | 6 | **Config pakai map[string]interface{}** | Tidak type-safe, runtime panic | Tambah typed struct di `config/config.go` |
 | 7 | **Skip context.Context** | Tidak bisa cancel/timeout propagation | Parameter pertama SELALU ctx |
 
 ---
 
-## 🧪 Workflow: Add New Feature — Vibe Check
+## 🧪 Workflow: Add New Feature - Vibe Check
 
 Misal: Tambah fitur **Payment Gateway** (Midtrans/Xendit). Step-by-step sesuai vibe Rancago:
 
-### Step 1 — Contracts First 📜
+### Step 1 - Contracts First 📜
 ```go
-// app/Contracts/payment.go — BUAT PERTAMA
+// app/Contracts/payment.go - BUAT PERTAMA
 type PaymentGateway interface {
     Charge(ctx context.Context, amount int64, orderID string) (*PaymentResult, error)
     Refund(ctx context.Context, txID string, amount int64) error
@@ -396,7 +396,7 @@ type PaymentService interface {
 }
 ```
 
-### Step 2 — Implement Drivers (OCP-ready) 🏭
+### Step 2 - Implement Drivers (OCP-ready) 🏭
 ```go
 // framework/Payment/Drivers/midtrans.go
 type MidtransDriver struct { ... }
@@ -404,9 +404,9 @@ func (m *MidtransDriver) Charge(ctx context.Context, ...) { /* Midtrans API */ }
 func (m *MidtransDriver) Name() string { return "midtrans" }
 ```
 
-### Step 3 — Manager with Registry 🎛
+### Step 3 - Manager with Registry 🎛
 ```go
-// framework/Payment/manager.go — pola sama dengan StorageManager
+// framework/Payment/manager.go - pola sama dengan StorageManager
 type PaymentManager struct {
     factories map[string]func(cfg) (Contracts.PaymentGateway, error)
     gateways  map[string]Contracts.PaymentGateway
@@ -415,7 +415,7 @@ func (pm *PaymentManager) RegisterFactory(name string, f ...) { ... }
 func (pm *PaymentManager) Gateway(name string) (Contracts.PaymentGateway, error) { ... }
 ```
 
-### Step 4 — Business Service 🧠
+### Step 4 - Business Service 🧠
 ```go
 // app/Services/PaymentService.go
 type paymentService struct {
@@ -424,10 +424,10 @@ type paymentService struct {
 func NewPaymentService(pm *Payment.PaymentManager) Contracts.PaymentService {
     return &paymentService{payments: pm}
 }
-// ⭐ Logic disini — transport agnostic
+// ⭐ Logic disini - transport agnostic
 ```
 
-### Step 5 — ServiceProvider Wiring 🔌
+### Step 5 - ServiceProvider Wiring 🔌
 ```go
 // app/Providers/PaymentServiceProvider.go
 func (p *PaymentServiceProvider) Register(c *Container.Container) error {
@@ -446,10 +446,10 @@ func (p *PaymentServiceProvider) Register(c *Container.Container) error {
 }
 ```
 
-### Step 6 — Register di Bootstrap Kernel 🚀
+### Step 6 - Register di Bootstrap Kernel 🚀
 Tambahkan ke `RegisterCore()` di [bootstrap/app.go](file:///d:/Rancago/bootstrap/app.go#L55-L60).
 
-### Step 7 — Multi-Transport Adapters 🔗
+### Step 7 - Multi-Transport Adapters 🔗
 ```go
 // framework/Transport/PaymentTransport.go
 func NewPaymentRESTAdapter(svc Contracts.PaymentService) *RESTAdapter { ... }
@@ -459,7 +459,7 @@ func NewPaymentGRPCAdapter(svc Contracts.PaymentService) *GRPCAdapter { ... }
 
 ---
 
-## ✅ Vibe Code Checklist — Sebelum Commit
+## ✅ Vibe Code Checklist - Sebelum Commit
 
 - [ ] Semua dependency baru punya Contract di `app/Contracts/`?
 - [ ] Service menggunakan constructor injection (tidak ada global)?
@@ -513,4 +513,4 @@ sm.RegisterFactory("azure_blob", func(dc config.StorageDiskConfig) (Contracts.St
 ---
 
 > 🚀 **Remember the Vibe**: "Think in Contracts, Build with Providers, Scale with Services."
-> Rancago bukan tentang seberapa banyak fitur — tapi seberapa mudah fitur itu ditambah tanpa merusak yang ada. SOLID itu bukan teori di Rancago, itu adalah default workflow sehari-hari.
+> Rancago bukan tentang seberapa banyak fitur - tapi seberapa mudah fitur itu ditambah tanpa merusak yang ada. SOLID itu bukan teori di Rancago, itu adalah default workflow sehari-hari.

@@ -69,7 +69,7 @@ func (ro *Route) As(name string) *Route {
 func (r *Router) All() []Route { return r.routes }
 
 // Mount registers all routes on an http.ServeMux.
-// Middleware string names are informational only — wire up actual middleware in bootstrap.
+// Middleware string names are informational only - wire up actual middleware in bootstrap.
 func (r *Router) Mount(mux *http.ServeMux) {
 	for _, route := range r.routes {
 		handler := route.Handler

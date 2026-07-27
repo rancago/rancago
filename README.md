@@ -439,10 +439,10 @@ UTILITIES
 
 ## License
 
-MIT License — Copyright (c) 2026 [Muhammad Ikhwan Fathulloh](https://github.com/ikhwanfathulloh)
+MIT License - Copyright (c) 2026 [Muhammad Ikhwan Fathulloh](https://github.com/ikhwanfathulloh)
 
 See [LICENSE](LICENSE) for full text.
 
 ---
 
-> **RANCAGO**: Go + Laravel productivity — idiomatic, typed, and built to scale.
+> **RANCAGO**: Go + Laravel productivity - idiomatic, typed, and built to scale.

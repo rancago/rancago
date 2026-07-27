@@ -64,7 +64,7 @@ type Document struct {
 	SourceType string         `gorm:"size:100"                                                                                                                         json:"source_type,omitempty"`
 	SourceID   string         `gorm:"size:255"                                                                                                                         json:"source_id,omitempty"`
 	Metadata   []byte         `gorm:"type:jsonb"                                                                                                                       json:"metadata,omitempty"`
-	// pgvector HNSW index — production-ready for cosine similarity semantic search.
+	// pgvector HNSW index - production-ready for cosine similarity semantic search.
 	Embedding  Vector         `gorm:"type:vector(1536);index:idx_documents_embedding,type:hnsw,using:hnsw,opclass:vector_cosine_ops"                                   json:"-"`
 	CreatedAt  time.Time      `                                                                                                                                        json:"created_at"`
 	UpdatedAt  time.Time      `                                                                                                                                        json:"updated_at"`

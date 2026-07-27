@@ -1,4 +1,4 @@
-# 📋 Rancago Framework — Product Requirements Document (PRD)
+# 📋 Rancago Framework - Product Requirements Document (PRD)
 
 > **Version**: 1.0.0  
 > **Last Updated**: 2026-07-27  
@@ -29,10 +29,10 @@ Rancago adalah framework backend berbasis **Go 1.23+** yang mengadopsi DX (Devel
 
 ### Target Persona
 
-1. **👨‍💻 Go Backend Engineer** — Ingin produktivitas Laravel tanpa meninggalkan performa & type safety Go.
-2. **🏢 Startup CTO** — Butuh framework yang bisa scale dari MVP ke 1M+ user tanpa rewrite total.
-3. **🎓 Software Architect** — Mengutamakan SOLID, testability, dan modular design yang enforce pattern.
-4. **🔧 Ex-Laravel Developer yang belajar Go** — Ingin familiar workflow tapi idiomatik di Go.
+1. **👨‍💻 Go Backend Engineer** - Ingin produktivitas Laravel tanpa meninggalkan performa & type safety Go.
+2. **🏢 Startup CTO** - Butuh framework yang bisa scale dari MVP ke 1M+ user tanpa rewrite total.
+3. **🎓 Software Architect** - Mengutamakan SOLID, testability, dan modular design yang enforce pattern.
+4. **🔧 Ex-Laravel Developer yang belajar Go** - Ingin familiar workflow tapi idiomatik di Go.
 
 ---
 
@@ -47,12 +47,12 @@ Rancago adalah framework backend berbasis **Go 1.23+** yang mengadopsi DX (Devel
 │  ↓ Adapters: RESTAdapter / GRPCAdapter / WSAction                │
 ├──────────────────────────────────────────────────────────────────┤
 │                       SERVICE LAYER (Use Cases)                   │
-│  app/Services/*.go — Business Logic, Transport-Agnostic          │
+│  app/Services/*.go - Business Logic, Transport-Agnostic          │
 │  ↓ Dependencies: HANYA pakai Contracts (interfaces)              │
 ├──────────────────────────────────────────────────────────────────┤
 │                     CONTRACTS LAYER (Abstractions)                │
-│  app/Contracts/*.go — ServiceProvider, StorageDriver, etc.       │
-│  ← No dependency ke luar — ISP & DIP 100% compliant              │
+│  app/Contracts/*.go - ServiceProvider, StorageDriver, etc.       │
+│  ← No dependency ke luar - ISP & DIP 100% compliant              │
 ├──────────────────────────────────────────────────────────────────┤
 │                  REPOSITORY / DRIVER LAYER (Implementations)      │
 │  framework/Storage/Drivers/ • framework/Auth/Providers/          │
@@ -156,7 +156,7 @@ Response kembali ke Transport Adapter → serialized → Client
 - [x] FR-F1-02: Support **Alias** mapping (e.g. `Contracts.NotificationService` → `service.notification`)
 - [x] FR-F1-03: Method `Resolve(abstract string) (interface{}, error)` + `MustResolve(abstract string) interface{}`
 - [x] FR-F1-04: Thread-safe dengan `sync.RWMutex` untuk concurrent resolve
-- [x] FR-F1-05: `Call(fn interface{})` — auto-resolve parameter function via reflection
+- [x] FR-F1-05: `Call(fn interface{})` - auto-resolve parameter function via reflection
 - [x] FR-F1-06: `Has(abstract string) bool` untuk cek binding existence
 
 #### Non-Functional Requirements (NFR):
@@ -207,9 +207,9 @@ Response kembali ke Transport Adapter → serialized → Client
   - Meta: `Name()`
 - [x] FR-F3-02: **Functional Options Pattern**: `WithContentType / WithACL / WithMetadata / WithVisibility`
 - [x] FR-F3-03: 3 Drivers built-in: **MinIO** + **Amazon S3** + **Google Drive** (via Service Account)
-- [x] FR-F3-04: Lazy Disk Initialization — Disk di-instantiate hanya saat `Disk(name)` pertama kali dipanggil
+- [x] FR-F3-04: Lazy Disk Initialization - Disk di-instantiate hanya saat `Disk(name)` pertama kali dipanggil
 - [x] FR-F3-05: `RegisterFactory(driverType, factory)` untuk tambah driver baru TANPA ubah Manager code
-- [x] FR-F3-06: **ProxyDriver Pattern** — `Proxy(name)` returns `StorageDriver` langsung (untuk constructor injection)
+- [x] FR-F3-06: **ProxyDriver Pattern** - `Proxy(name)` returns `StorageDriver` langsung (untuk constructor injection)
 - [x] FR-F3-07: Default disk configurable via `StorageConfig.Default`
 - [x] FR-F3-08: `AvailableDisks() []string` list semua configured disk
 - [x] FR-F3-09: **Container Binding Actual** (lihat [StorageServiceProvider.go](file:///d:/Rancago/app/Providers/StorageServiceProvider.go#L17-L38)):
@@ -226,8 +226,8 @@ type StorageConfig struct {
 ```
 
 #### NFR:
-- [x] NFR-F3-01: 100% Open/Closed Principle — tambah driver = RegisterFactory, tidak sentuh file framework
-- [x] NFR-F3-02: Liskov Substitution — MinIODriver, GDriveDriver, S3Driver interchangeable tanpa kode consumer berubah
+- [x] NFR-F3-01: 100% Open/Closed Principle - tambah driver = RegisterFactory, tidak sentuh file framework
+- [x] NFR-F3-02: Liskov Substitution - MinIODriver, GDriveDriver, S3Driver interchangeable tanpa kode consumer berubah
 
 ---
 
@@ -240,7 +240,7 @@ type StorageConfig struct {
 - [x] FR-F4-01: `AuthProvider` interface: `Name / Redirect / Callback / UserFromToken`
 - [x] FR-F4-02: `SocialUser` struct seragam untuk SEMUA provider (Provider/ID/Email/Name/Avatar/Nickname/Token/RefreshToken/RawAttributes)
 - [x] FR-F4-03: 3 Providers built-in config: **Google** + **GitHub** + **Facebook**
-- [x] FR-F4-04: `RegisterDriver(name, factory)` — tambah provider custom (Keycloak/LinkedIn/OIDC) TANPA ubah manager
+- [x] FR-F4-04: `RegisterDriver(name, factory)` - tambah provider custom (Keycloak/LinkedIn/OIDC) TANPA ubah manager
 - [x] FR-F4-05: `Redirect(ctx, driver)` returns `(authURL, state, error)` + auto-generate secure state
 - [x] FR-F4-06: `Callback(ctx, driver, code, state)` validates state + exchanges code → `SocialUser`
 
@@ -259,7 +259,7 @@ type StorageConfig struct {
 
 #### NFR:
 - [x] NFR-F4-01: RBAC check < 1ms karena Redis in-memory
-- [x] NFR-F4-02: OCP — tambah OAuth provider tidak ubah SocialiteManager code
+- [x] NFR-F4-02: OCP - tambah OAuth provider tidak ubah SocialiteManager code
 
 ---
 
@@ -295,12 +295,12 @@ https://www.googleapis.com/auth/meetings.space.created
 
 ---
 
-### 3.6 F6: Database — Generic Repository + pgvector Semantic Search
+### 3.6 F6: Database - Generic Repository + pgvector Semantic Search
 
 **Priority**: P0 (Must Have)  
 **Reference Files**: [database.go](file:///d:/Rancago/app/Contracts/database.go) + [vector.go](file:///d:/rancago/framework/Database/vector.go) + [models.go](file:///d:/Rancago/app/Models/models.go)
 
-#### FR (Built-in GORM Models — actual di models.go):
+#### FR (Built-in GORM Models - actual di models.go):
 - [x] FR-F6-00: 4 Core GORM Models built-in:
   - **User**: ID/Name/Email/Password/AvatarURL/Provider/ProviderID/RememberToken/EmailVerifiedAt + many2many Roles & Permissions
   - **Role**: ID/Name/Label + many2many Permissions
@@ -327,13 +327,13 @@ https://www.googleapis.com/auth/meetings.space.created
 
 #### FR (pgvector Semantic Search):
 - [x] FR-F6-03: Custom `Vector` type (GORM-compatible: Scan + Value driver interface)
-- [x] FR-F6-04: `VectorRepository[T]` interface — 3 algorithm built-in:
+- [x] FR-F6-04: `VectorRepository[T]` interface - 3 algorithm built-in:
   - **Cosine Similarity** (default untuk semantic search: 0 = tidak mirip, 1 = identik)
-  - **L2 Distance (Euclidean)** — untuk geometri/image embedding
-  - **Inner Product** — untuk normalized embedding (alias cosine normalized)
+  - **L2 Distance (Euclidean)** - untuk geometri/image embedding
+  - **Inner Product** - untuk normalized embedding (alias cosine normalized)
 - [x] FR-F6-05: `SimilaritySearch` dengan configurable `threshold` (misal 0.75 = filter similarity ≥ 75%)
 - [x] FR-F6-06: `UpsertVector(id, embedding, metadata)` dan `DeleteVector(id)` untuk index management
-- [x] FR-F6-07: `EnsureExtension()` — otomatis `CREATE EXTENSION IF NOT EXISTS vector;`
+- [x] FR-F6-07: `EnsureExtension()` - otomatis `CREATE EXTENSION IF NOT EXISTS vector;`
 
 #### FR (Transaction Manager):
 - [x] FR-F6-08: `Transaction` interface: `Begin / Commit / Rollback / Do(ctx, fn)` dengan auto-rollback on panic/error
@@ -364,17 +364,17 @@ https://www.googleapis.com/auth/meetings.space.created
 - [x] FR-F7-05: WebSocket auto-dispatch action envelope via Hub
 
 #### Demo Service: NotificationService (app/Services/NotificationService.go)
-Concrete struct: `InMemoryNotificationService` — in-memory map store + Redis unread counter cache + WebSocket push.
+Concrete struct: `InMemoryNotificationService` - in-memory map store + Redis unread counter cache + WebSocket push.
 Container binding (lihat [bootstrap/app.go](file:///d:/Rancago/bootstrap/app.go#L73-L82)):
 - Singleton key: `"service.notification"`
 - Alias: `"Contracts.NotificationService"` → resolve via interface (DIP compliant)
 
 Methods:
-- `Send(ctx, *Notification)` — Kirim ke user tertentu + cache unread count Redis + push WS realtime
-- `Broadcast(ctx, title, body, data)` — Broadcast ke ALL WS clients via Hub.Broadcast
-- `List(ctx, userID, limit, offset)` — In-memory filter + sort desc by CreatedAt + PaginationMeta
-- `MarkRead(ctx, id, userID)` — Update Read flag + decrement Redis unread
-- `GetUnreadCount(ctx, userID)` — Redis-first with fallback in-memory count
+- `Send(ctx, *Notification)` - Kirim ke user tertentu + cache unread count Redis + push WS realtime
+- `Broadcast(ctx, title, body, data)` - Broadcast ke ALL WS clients via Hub.Broadcast
+- `List(ctx, userID, limit, offset)` - In-memory filter + sort desc by CreatedAt + PaginationMeta
+- `MarkRead(ctx, id, userID)` - Update Read flag + decrement Redis unread
+- `GetUnreadCount(ctx, userID)` - Redis-first with fallback in-memory count
 
 ---
 
@@ -448,7 +448,7 @@ Module    = github.com/rancago/framework
 **Reference Files**: [config.go](file:///d:/Rancago/config/config.go)
 
 #### FR:
-- [x] FR-F10-01: 100% typed struct configuration — TIDAK ADA `map[string]interface{}` untuk config
+- [x] FR-F10-01: 100% typed struct configuration - TIDAK ADA `map[string]interface{}` untuk config
 - [x] FR-F10-02: `Load()` returns `*Config` dengan default value production-ready
 - [x] FR-F10-03: Config Categories:
 
@@ -463,7 +463,7 @@ Module    = github.com/rancago/framework
 | `ServerConfig` | HTTPPort/GRPCPort/WSPort/Debug | 8080/9090/6001 Debug=true |
 
 #### NFR:
-- [x] NFR-F10-01: Extensible — tambah config section = tambah typed struct field + default value di `Load()`
+- [x] NFR-F10-01: Extensible - tambah config section = tambah typed struct field + default value di `Load()`
 
 ---
 
@@ -567,12 +567,12 @@ Connect: `ws://localhost:8080/ws?user_id=123`
 
 | Komponen | Minimum Version | Resource Minimum |
 |---|---|---|
-| **Go Runtime** | 1.23.4 | — |
+| **Go Runtime** | 1.23.4 | - |
 | **PostgreSQL** | 14+ dengan extension `vector` | 2 vCPU / 4GB RAM |
 | **Redis** | 6+ (enable persistence RDB/AOF) | 1 vCPU / 2GB RAM |
 | **MinIO / S3 Compatible** | Latest (opsional tanpa storage feature) | 1 vCPU / 2GB RAM |
-| **Load Balancer** | Nginx / HAProxy | — |
-| **Google Service Account** | DwD-enabled untuk Calendar impersonation (opsional) | — |
+| **Load Balancer** | Nginx / HAProxy | - |
+| **Google Service Account** | DwD-enabled untuk Calendar impersonation (opsional) | - |
 
 ### 6.2 Scaling Checklist Production
 
@@ -587,12 +587,12 @@ Connect: `ws://localhost:8080/ws?user_id=123`
    - `maxmemory-policy allkeys-lru` untuk cache eviction aman
 
 3. **WebSocket**:
-   - Nginx di depan: `ip_hash` sticky session (opsional — Redis PubSub sudah mengatasi tanpa sticky)
+   - Nginx di depan: `ip_hash` sticky session (opsional - Redis PubSub sudah mengatasi tanpa sticky)
    - `Upgrader.CheckOrigin` di-set ketat untuk production (bukan `*`)
    - `gorilla/websocket` `ReadBufferSize`/`WriteBufferSize` disesuaikan
 
 4. **Security**:
-   - `APP_KEY` (AppConfig.Key) di-ganti dari default — pakai `Rancago key:generate` output
+   - `APP_KEY` (AppConfig.Key) di-ganti dari default - pakai `Rancago key:generate` output
    - OAuth RedirectURL production pakai HTTPS
    - Storage PresignedURL expiry < 15 menit untuk private file
    - CORS Origin strict list, bukan `*`
@@ -628,7 +628,7 @@ Connect: `ws://localhost:8080/ws?user_id=123`
 
 ## 🗺 8. Product Roadmap (Prioritized)
 
-### Milestone 1.0 (Current — ✅ Completed di struktur ini)
+### Milestone 1.0 (Current - ✅ Completed di struktur ini)
 - [x] IoC Container + ServiceProvider lifecycle
 - [x] Storage Manager 3 Drivers (MinIO/S3/GDrive)
 - [x] Socialite-style OAuth 3 Providers (Google/GitHub/Facebook)
@@ -640,24 +640,24 @@ Connect: `ws://localhost:8080/ws?user_id=123`
 - [x] Artisan-style CLI Generators + Migrations
 - [x] Typed Struct Configuration
 
-### Milestone 1.1 (Next — Q3 2026)
-- [ ] **Queue Worker System** (Beanstalkd / Redis Streams) — Horizon-style dashboard
-- [ ] **Validation Package** — go-playground/validator wrapper dengan Form Request style
-- [ ] **Pagination Template** — Cursor-based pagination + JSON:API spec
-- [ ] **Logging Package** — Zerolog wrapper structured JSON + trace ID middleware
+### Milestone 1.1 (Next - Q3 2026)
+- [ ] **Queue Worker System** (Beanstalkd / Redis Streams) - Horizon-style dashboard
+- [ ] **Validation Package** - go-playground/validator wrapper dengan Form Request style
+- [ ] **Pagination Template** - Cursor-based pagination + JSON:API spec
+- [ ] **Logging Package** - Zerolog wrapper structured JSON + trace ID middleware
 - [ ] **CORS Middleware** rs/cors terintegrasi default di Router
 
 ### Milestone 1.2 (Q4 2026)
-- [ ] **GraphQL Adapter** — gqlgen sebagai Transport ke-4 (1 Service = REST/gRPC/WS/GraphQL)
-- [ ] **SSE (Server-Sent Events) Adapter** — realtime ringan tanpa WebSocket
-- [ ] **Rate Limiter Middleware** — Redis-backed sliding window
-- [ ] **Testing Helpers** — Container mock helper, Storage fake driver, WS hub in-memory test
+- [ ] **GraphQL Adapter** - gqlgen sebagai Transport ke-4 (1 Service = REST/gRPC/WS/GraphQL)
+- [ ] **SSE (Server-Sent Events) Adapter** - realtime ringan tanpa WebSocket
+- [ ] **Rate Limiter Middleware** - Redis-backed sliding window
+- [ ] **Testing Helpers** - Container mock helper, Storage fake driver, WS hub in-memory test
 
 ### Milestone 2.0 (2027)
-- [ ] **Rancago Admin Panel** — Auto CRUD UI dari GORM Models (seperti Nova/Filament)
-- [ ] **Multi-Tenancy Package** — Schema-based atau Column-based multi-tenant ready
-- [ ] **Extract `framework/` ke Go Module terpisah** — `go get github.com/rancago/framework`
-- [ ] **Rancago Installer** — `Rancago new my-project` clone skeleton + init config
+- [ ] **Rancago Admin Panel** - Auto CRUD UI dari GORM Models (seperti Nova/Filament)
+- [ ] **Multi-Tenancy Package** - Schema-based atau Column-based multi-tenant ready
+- [ ] **Extract `framework/` ke Go Module terpisah** - `go get github.com/rancago/framework`
+- [ ] **Rancago Installer** - `Rancago new my-project` clone skeleton + init config
 
 ---
 
@@ -669,8 +669,8 @@ Rancago DI-DESAIN untuk enforce SOLID, bukan sekadar slogan. Berikut bukti imple
 |---|---|---|
 | **S**ingle Responsibility | `StorageManager` hanya mengatur registry & lazy disk; `MinIODriver` hanya handle MinIO API | [manager.go](file:///d:/rancago/framework/Storage/manager.go) vs [minio.go](file:///d:/rancago/framework/Storage/Drivers/minio.go) |
 | **O**pen/Closed | `RegisterFactory()` tambah driver Local/Azure tanpa ubah `StorageManager` 1 baris | [manager.go](file:///d:/rancago/framework/Storage/manager.go#L33-L37) |
-| **L**iskov Substitution | `MinIODriver ≡ GDriveDriver` — keduanya implement `StorageDriver` 13 method, bisa swap tanpa code consumer berubah | [storage.go](file:///d:/Rancago/app/Contracts/storage.go#L9-L22) |
-| **I**nterface Segregation | `CalendarService` terpisah dari `MeetService` terpisah dari `MeetingScheduler` — tidak ada method yang irrelevant untuk implementor | [google.go](file:///d:/Rancago/app/Contracts/google.go#L8-L99) |
+| **L**iskov Substitution | `MinIODriver ≡ GDriveDriver` - keduanya implement `StorageDriver` 13 method, bisa swap tanpa code consumer berubah | [storage.go](file:///d:/Rancago/app/Contracts/storage.go#L9-L22) |
+| **I**nterface Segregation | `CalendarService` terpisah dari `MeetService` terpisah dari `MeetingScheduler` - tidak ada method yang irrelevant untuk implementor | [google.go](file:///d:/Rancago/app/Contracts/google.go#L8-L99) |
 | **D**ependency Inversion | `NotificationService` menerima `*RedisManager` dan `*Hub` lewat constructor, tidak akses global; semua bergantung ke `Contracts.*` interface | `app/Services/NotificationService.go` + [notification.go](file:///d:/Rancago/app/Contracts/notification.go) |
 
 ---
@@ -716,4 +716,4 @@ Rancago DI-DESAIN untuk enforce SOLID, bukan sekadar slogan. Berikut bukti imple
 ---
 
 > 🚀 **Rancago 1.0.0**: Bukan sekadar framework. Ini adalah janji: *produktivitas tanpa mengorbankan prinsip, kecepatan tanpa meninggalkan kualitas.*
-> Dari MVP yang selesai 3 hari, ke sistem yang menghandle 1 juta user per hari — tanpa rewrite total. That's the Rancago Promise. 🦫✨
+> Dari MVP yang selesai 3 hari, ke sistem yang menghandle 1 juta user per hari - tanpa rewrite total. That's the Rancago Promise. 🦫✨

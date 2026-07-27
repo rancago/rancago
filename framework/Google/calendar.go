@@ -1,5 +1,5 @@
 // Package Google provides Google Calendar and Google Meet integrations for Rancago.
-// Currently ships a stub implementation — swap in google.golang.org/api once added to go.mod.
+// Currently ships a stub implementation - swap in google.golang.org/api once added to go.mod.
 package Google
 
 import (

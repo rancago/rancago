@@ -32,7 +32,7 @@ type NotificationService struct {
 var _ Contracts.NotificationService = (*NotificationService)(nil)
 
 // NewNotificationService creates a NotificationService.
-// Passing nil for redis or hub is safe — those features are gracefully skipped.
+// Passing nil for redis or hub is safe - those features are gracefully skipped.
 func NewNotificationService(redis *Cache.RedisManager, hub *WebSocket.Hub) *NotificationService {
 	return &NotificationService{
 		items: make(map[string]*Contracts.Notification),

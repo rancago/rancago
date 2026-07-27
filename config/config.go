@@ -1,5 +1,5 @@
 // Package config provides fully-typed configuration for Rancago Framework.
-// All values are typed structs — no map[string]interface{} here.
+// All values are typed structs - no map[string]interface{} here.
 package config
 
 import (

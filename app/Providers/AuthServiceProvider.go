@@ -73,5 +73,5 @@ func (p *AuthServiceProvider) Register(c *Container.Container) error {
 	return nil
 }
 
-// Boot is a no-op for auth — all wiring happens in Register.
+// Boot is a no-op for auth - all wiring happens in Register.
 func (p *AuthServiceProvider) Boot(_ *Container.Container) error { return nil }

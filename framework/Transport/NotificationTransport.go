@@ -1,6 +1,6 @@
 // Package Transport provides multi-API transport adapters for Rancago Framework.
 // The same service is exposed via REST, gRPC, and WebSocket without code duplication.
-// Business logic lives in app/Services — these adapters only handle format translation.
+// Business logic lives in app/Services - these adapters only handle format translation.
 package Transport
 
 import (
@@ -198,7 +198,7 @@ func NewWSAdapter(svc Contracts.NotificationService) *NotificationWSAdapter {
 }
 
 func (a *NotificationWSAdapter) registerActions() {
-	// Placeholder — in a real implementation these are dispatch via the Hub.
+	// Placeholder - in a real implementation these are dispatch via the Hub.
 	// action: "notification:send", "notification:list", etc.
 }
 

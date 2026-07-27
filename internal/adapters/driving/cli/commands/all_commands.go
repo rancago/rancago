@@ -399,7 +399,7 @@ func NewTinkerCommand() *SimpleCommand {
 					fmt.Println("    - uc.document      : driving.DocumentUseCase")
 					fmt.Println()
 				case "info":
-					fmt.Println("\n  Rancago Framework 1.0.0 — Hexagonal Architecture Edition")
+					fmt.Println("\n  Rancago Framework 1.0.0 - Hexagonal Architecture Edition")
 					fmt.Println("  Go module: " + ModuleName())
 					fmt.Println("  Pattern: Ports & Adapters (Hexagonal)")
 					fmt.Println("  Layers:  domain → ports → application → adapters → bootstrap")
