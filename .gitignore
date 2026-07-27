@@ -1,0 +1,10 @@
+# Build output
+*.exe
+*.out
+dist/
+
+# rancago-cli is its own separate repo
+rancago-cli/
+
+# Go
+vendor/
