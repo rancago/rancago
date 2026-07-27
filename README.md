@@ -1,12 +1,33 @@
-# Rancago Framework
+# RANCAGO Framework
 
-> **A Laravel-inspired backend framework built on Go** — designed for a productive developer experience without sacrificing Go's idioms, type safety, or enterprise-grade performance.
+> **Resilient, Agnostic, & Native Clean-Architecture GO Framework**
 
 [![Go Version](https://img.shields.io/badge/Go-1.23%2B-00ADD8?style=flat-square&logo=go)](https://go.dev)
 [![Module](https://img.shields.io/badge/module-github.com%2Francago%2Fframework-blue?style=flat-square)](https://github.com/rancago/rancago)
 [![License](https://img.shields.io/badge/license-Proprietary-red?style=flat-square)](LICENSE)
 
 SOLID Principles · IoC Service Container · Multi-API Transport · pgvector Semantic Search · Redis WebSocket Hub · Google Ecosystem · OAuth Socialite
+
+---
+
+## The Name
+
+**RANCAGO** carries two layers of meaning.
+
+**Official acronym:**
+
+> **R**esilient, **A**gnostic, & **N**ative **C**lean-**A**rchitecture **G**O Framework
+
+Built to be resilient under load, transport-agnostic (REST + gRPC + WebSocket from one service definition), and natively idiomatic to Go's clean-architecture patterns.
+
+**Sundanese / local roots:**
+
+| Word | Meaning |
+|---|---|
+| **Rancagé** | *Skilled, precise, and structured craftsmanship* — reflects how Rancago enforces SOLID principles and clean hexagonal architecture step by step. |
+| **Ranca** | *A fertile, expansive wetland ecosystem* — mirrors the rich built-in feature set: pgvector, Redis, MinIO, Google Drive, Meet, Calendar, OAuth, RBAC, all growing from one foundation. |
+
+The name is both a technical acronym and a tribute to local culture — a framework engineered with care (*rancagé*) and designed to grow like a fertile ecosystem (*ranca*).
 
 ---
 
@@ -32,8 +53,8 @@ SOLID Principles · IoC Service Container · Multi-API Transport · pgvector Sem
 | 📦 **Storage** | **MinIO** · **Amazon S3** · **Google Drive** · Lazy disk init · Functional Options · Temporary presigned URLs · OCP `RegisterFactory` extension point |
 | 📅 **Google Ecosystem** | Calendar API (CRUD + attendees + reminders) · Google Meet auto-link · **MeetingScheduler** facade (1 call = event + Meet link) |
 | 🔐 **Auth** | Socialite-style OAuth: **Google / GitHub / Facebook / Custom OIDC** · Redis-backed RBAC (roles + permissions + policy middleware) · Bearer token middleware |
-| ⚡ **Cache & Realtime** | Redis Manager (Get/Set/SAdd/PubSub) · Rate limiter · **Scalable WebSocket Hub** (multi-node via Redis Pub/Sub — broadcast / channel / direct) |
-| 🎯 **Transport** | **1 service = 3 endpoints**: REST HTTP + gRPC + WebSocket — zero code duplication |
+| ⚡ **Cache & Realtime** | Redis Manager (Get/Set/SAdd/PubSub) · Rate limiter · **Scalable WebSocket Hub** (multi-node via Redis Pub/Sub - broadcast / channel / direct) |
+| 🎯 **Transport** | **1 service = 3 endpoints**: REST HTTP + gRPC + WebSocket - zero code duplication |
 | 🛠 **CLI** | `serve · migrate · scaffold · make:entity/value-object/port/usecase/adapter/model/migration · key:generate · storage:link · route:list · tinker` |
 
 ---
@@ -145,11 +166,11 @@ curl http://localhost:8080/
 ### The Golden Rule: Contracts → Providers → Services
 
 ```
-app/Contracts/*.go   — define all interfaces first (DIP, ISP compliant)
+app/Contracts/*.go   - define all interfaces first (DIP, ISP compliant)
      ↓
-app/Providers/*.go   — bind concrete implementations into the container
+app/Providers/*.go   - bind concrete implementations into the container
      ↓
-app/Services/*.go    — transport-agnostic business logic, depend on Contracts only
+app/Services/*.go    - transport-agnostic business logic, depend on Contracts only
 ```
 
 ### IoC Container
@@ -198,7 +219,7 @@ app.RegisterProviders(
 
 ## Module Guides
 
-### Storage — MinIO · S3 · Google Drive
+### Storage - MinIO · S3 · Google Drive
 
 Depend on the interface, not the concrete driver:
 
@@ -257,7 +278,7 @@ fmt.Println(result.MeetSpace.JoinURL) // https://meet.google.com/xxx-yyy-zzz
 authURL, state, _ := socialite.Redirect(ctx, "google")
 http.Redirect(w, r, authURL, http.StatusTemporaryRedirect)
 
-// Handle callback — returns a unified SocialUser regardless of provider
+// Handle callback - returns a unified SocialUser regardless of provider
 user, _ := socialite.Callback(ctx, "google", code, state)
 fmt.Println(user.Email, user.Name, user.AvatarURL)
 ```
@@ -281,7 +302,7 @@ mgr.RegisterDriver("keycloak", func() (Contracts.AuthProvider, error) {
 rbac.AssignRole(ctx, "user-123", "admin")
 rbac.GivePermissionToRole(ctx, "admin", "delete:user")
 
-// HTTP middleware — blocks requests without the required permission
+// HTTP middleware - blocks requests without the required permission
 mux.Handle("/admin/users",
     rbac.Middleware("delete:user")(http.HandlerFunc(handler)))
 
@@ -290,7 +311,7 @@ mux.Handle("/admin/dashboard",
     rbac.RoleMiddleware("admin", "superadmin")(http.HandlerFunc(handler)))
 ```
 
-### Notifications — 1 service, 3 transports
+### Notifications - 1 service, 3 transports
 
 Write the business logic once in `app/Services/NotificationService.go`. The same code is exposed via REST, gRPC, and WebSocket automatically.
 
@@ -308,7 +329,7 @@ wscat -c "ws://localhost:8080/ws?user_id=123"
 
 ### Multi-node WebSocket (Redis Pub/Sub)
 
-Every `PublishChannel` call publishes to `rancago:ws:{channel}` in Redis. All running instances subscribe and relay messages to their local clients — no sticky sessions required.
+Every `PublishChannel` call publishes to `rancago:ws:{channel}` in Redis. All running instances subscribe and relay messages to their local clients - no sticky sessions required.
 
 ```bash
 # Node 1
@@ -323,7 +344,7 @@ User A on `:8080` sends to `room:123` → User B on `:8081` receives it automati
 ### pgvector Semantic Search
 
 ```go
-// Cosine similarity search — returns documents most semantically similar to the query
+// Cosine similarity search - returns documents most semantically similar to the query
 threshold := float64(0.75)
 results, _ := docRepo.SimilaritySearch(ctx, queryEmbedding, 10, &threshold)
 for _, hit := range results {
@@ -376,8 +397,8 @@ UTILITIES
 
 | Module | SRP | OCP | LSP | ISP | DIP |
 |---|---|---|---|---|---|
-| **Storage** | ✅ Manager / Driver / Provider each have one job | ✅ `RegisterFactory` — add drivers without changing Manager | ✅ MinIO ≡ S3 ≡ GDrive, fully interchangeable | ✅ 13-method interface, nothing irrelevant | ✅ Depend on `Contracts.StorageDriver` |
-| **OAuth** | ✅ Generic provider + named wrappers separated | ✅ `RegisterDriver` — add OIDC/Keycloak without touching SocialiteManager | ✅ All return `SocialUser` | ✅ 4-method slim interface | ✅ `Contracts.AuthProvider` |
+| **Storage** | ✅ Manager / Driver / Provider each have one job | ✅ `RegisterFactory` - add drivers without changing Manager | ✅ MinIO ≡ S3 ≡ GDrive, fully interchangeable | ✅ 13-method interface, nothing irrelevant | ✅ Depend on `Contracts.StorageDriver` |
+| **OAuth** | ✅ Generic provider + named wrappers separated | ✅ `RegisterDriver` - add OIDC/Keycloak without touching SocialiteManager | ✅ All return `SocialUser` | ✅ 4-method slim interface | ✅ `Contracts.AuthProvider` |
 | **Transport** | ✅ REST / gRPC / WS adapters each handle one format | ✅ Add GraphQL = new adapter file | ✅ All call `Contracts.NotificationService` | ✅ No REST methods on WS adapter | ✅ All depend on service contracts |
 | **RBAC** | ✅ Auth, roles, and permissions separated | ✅ Add permission checks without changing RBACService | ✅ Redis-backed ≡ in-memory, swappable | ✅ Minimal interface per concern | ✅ `Contracts.RBACService` |
 
@@ -385,14 +406,14 @@ UTILITIES
 
 ## Production Checklist
 
-1. **Config** — override via env vars (`APP_KEY`, `DB_*`, `REDIS_*`). Rotate `APP_KEY` from default.
-2. **PostgreSQL** — set `SetMaxOpenConns(100)`, `SetMaxIdleConns(25)`. Enable `pg_stat_statements`. Create pgvector HNSW index before going live.
-3. **Redis** — enable RDB/AOF persistence for RBAC data. Use Cluster Mode above 1M WebSocket connections.
-4. **WebSocket** — put Nginx/HAProxy in front. `rancago:ws:*` pub/sub means sticky sessions are optional.
-5. **Storage** — enforce HTTPS for S3/MinIO. Set presigned URL expiry < 15 minutes for private files.
-6. **OAuth** — use HTTPS redirect URLs in production. Store `oauth_state` in Redis/signed cookie.
-7. **Google APIs** — enable Domain-Wide Delegation on the Service Account for Calendar impersonation.
-8. **Observability** — export Prometheus metrics from Redis `INFO stats`, `pg_stat_statements`, and WebSocket `connected_count`.
+1. **Config** - override via env vars (`APP_KEY`, `DB_*`, `REDIS_*`). Rotate `APP_KEY` from default.
+2. **PostgreSQL** - set `SetMaxOpenConns(100)`, `SetMaxIdleConns(25)`. Enable `pg_stat_statements`. Create pgvector HNSW index before going live.
+3. **Redis** - enable RDB/AOF persistence for RBAC data. Use Cluster Mode above 1M WebSocket connections.
+4. **WebSocket** - put Nginx/HAProxy in front. `rancago:ws:*` pub/sub means sticky sessions are optional.
+5. **Storage** - enforce HTTPS for S3/MinIO. Set presigned URL expiry < 15 minutes for private files.
+6. **OAuth** - use HTTPS redirect URLs in production. Store `oauth_state` in Redis/signed cookie.
+7. **Google APIs** - enable Domain-Wide Delegation on the Service Account for Calendar impersonation.
+8. **Observability** - export Prometheus metrics from Redis `INFO stats`, `pg_stat_statements`, and WebSocket `connected_count`.
 
 ---
 
@@ -418,8 +439,8 @@ UTILITIES
 
 ## License
 
-Proprietary — Muhammad Ikhwan Fathulloh © 2026. Rancago Framework 1.0.0.
+Proprietary - Muhammad Ikhwan Fathulloh © 2026. Rancago Framework 1.0.0.
 
 ---
 
-> **Rancago**: Go + Laravel productivity — idiomatic, typed, and built to scale.
+> **Rancago**: Go + Laravel productivity - idiomatic, typed, and built to scale.

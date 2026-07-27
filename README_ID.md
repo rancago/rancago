@@ -1,12 +1,33 @@
-# Rancago Framework
+# RANCAGO Framework
 
-> **Framework backend bergaya Laravel, dibangun di atas Go** — dirancang untuk developer experience yang produktif tanpa mengorbankan idiom Go, type safety, maupun performa skala enterprise.
+> **Resilient, Agnostic, & Native Clean-Architecture GO Framework**
 
 [![Go Version](https://img.shields.io/badge/Go-1.23%2B-00ADD8?style=flat-square&logo=go)](https://go.dev)
 [![Module](https://img.shields.io/badge/module-github.com%2Francago%2Fframework-blue?style=flat-square)](https://github.com/rancago/rancago)
 [![License](https://img.shields.io/badge/license-Proprietary-red?style=flat-square)](LICENSE)
 
 SOLID Principles · IoC Service Container · Multi-API Transport · pgvector Semantic Search · Redis WebSocket Hub · Google Ecosystem · OAuth Socialite
+
+---
+
+## Arti Nama
+
+**RANCAGO** membawa dua lapisan makna sekaligus.
+
+**Akronim resmi:**
+
+> **R**esilient, **A**gnostic, & **N**ative **C**lean-**A**rchitecture **G**O Framework
+
+Dirancang untuk tangguh di bawah beban (*resilient*), bebas dari ketergantungan transport tertentu (*agnostic* — REST + gRPC + WebSocket dari satu definisi service), dan sepenuhnya idiomatik terhadap pola clean architecture di Go (*native*).
+
+**Akar Sunda / lokal:**
+
+| Kata | Makna |
+|---|---|
+| **Rancagé** | *Kecakapan, keterampilan, dan kerapian dalam merancang sesuatu secara bertahap dan terstruktur* — mencerminkan cara Rancago menegakkan prinsip SOLID dan arsitektur hexagonal langkah demi langkah. |
+| **Ranca** | *Daerah perairan/lahan luas yang subur* — melambangkan ekosistem framework yang kaya fitur bawaan: pgvector, Redis, MinIO, Google Drive, Meet, Calendar, OAuth, RBAC, semuanya tumbuh dari satu fondasi. |
+
+Namanya sekaligus akronim teknis dan penghormatan terhadap budaya lokal — framework yang dibangun dengan kecakapan (*rancagé*) dan dirancang tumbuh seperti ekosistem subur (*ranca*).
 
 ---
 
@@ -32,8 +53,8 @@ SOLID Principles · IoC Service Container · Multi-API Transport · pgvector Sem
 | 📦 **Storage** | **MinIO** · **Amazon S3** · **Google Drive** · Lazy disk init · Functional Options · Temporary presigned URL · Extension point `RegisterFactory` (OCP) |
 | 📅 **Google Ecosystem** | Calendar API (CRUD + attendee + reminder) · Google Meet auto-link · Facade **MeetingScheduler** (1 panggilan = event + Meet link) |
 | 🔐 **Auth** | OAuth Socialite: **Google / GitHub / Facebook / Custom OIDC** · RBAC berbasis Redis (role + permission + policy middleware) · Auth middleware Bearer token |
-| ⚡ **Cache & Realtime** | Redis Manager (Get/Set/SAdd/PubSub) · Rate limiter · **Scalable WebSocket Hub** (multi-node via Redis Pub/Sub — broadcast / channel / direct) |
-| 🎯 **Transport** | **1 service = 3 endpoint**: REST HTTP + gRPC + WebSocket — nol duplikasi kode |
+| ⚡ **Cache & Realtime** | Redis Manager (Get/Set/SAdd/PubSub) · Rate limiter · **Scalable WebSocket Hub** (multi-node via Redis Pub/Sub - broadcast / channel / direct) |
+| 🎯 **Transport** | **1 service = 3 endpoint**: REST HTTP + gRPC + WebSocket - nol duplikasi kode |
 | 🛠 **CLI** | `serve · migrate · scaffold · make:entity/value-object/port/usecase/adapter/model/migration · key:generate · storage:link · route:list · tinker` |
 
 ---
@@ -145,11 +166,11 @@ curl http://localhost:8080/
 ### Aturan Emas: Contracts → Providers → Services
 
 ```
-app/Contracts/*.go   — definisikan semua interface terlebih dahulu (DIP, ISP compliant)
+app/Contracts/*.go   - definisikan semua interface terlebih dahulu (DIP, ISP compliant)
      ↓
-app/Providers/*.go   — ikat implementasi konkret ke dalam container
+app/Providers/*.go   - ikat implementasi konkret ke dalam container
      ↓
-app/Services/*.go    — logika bisnis transport-agnostic, hanya bergantung pada Contracts
+app/Services/*.go    - logika bisnis transport-agnostic, hanya bergantung pada Contracts
 ```
 
 ### IoC Container
@@ -198,7 +219,7 @@ app.RegisterProviders(
 
 ## Panduan Modul
 
-### Storage — MinIO · S3 · Google Drive
+### Storage - MinIO · S3 · Google Drive
 
 Bergantung pada interface, bukan driver konkret:
 
@@ -257,7 +278,7 @@ fmt.Println(result.MeetSpace.JoinURL) // https://meet.google.com/xxx-yyy-zzz
 authURL, state, _ := socialite.Redirect(ctx, "google")
 http.Redirect(w, r, authURL, http.StatusTemporaryRedirect)
 
-// Handle callback — mengembalikan SocialUser yang seragam untuk semua provider
+// Handle callback - mengembalikan SocialUser yang seragam untuk semua provider
 user, _ := socialite.Callback(ctx, "google", code, state)
 fmt.Println(user.Email, user.Name, user.AvatarURL)
 ```
@@ -281,7 +302,7 @@ mgr.RegisterDriver("keycloak", func() (Contracts.AuthProvider, error) {
 rbac.AssignRole(ctx, "user-123", "admin")
 rbac.GivePermissionToRole(ctx, "admin", "delete:user")
 
-// Middleware HTTP — memblokir request yang tidak punya permission yang dibutuhkan
+// Middleware HTTP - memblokir request yang tidak punya permission yang dibutuhkan
 mux.Handle("/admin/users",
     rbac.Middleware("delete:user")(http.HandlerFunc(handler)))
 
@@ -290,7 +311,7 @@ mux.Handle("/admin/dashboard",
     rbac.RoleMiddleware("admin", "superadmin")(http.HandlerFunc(handler)))
 ```
 
-### Notifikasi — 1 service, 3 transport
+### Notifikasi - 1 service, 3 transport
 
 Tulis logika bisnis sekali saja di `app/Services/NotificationService.go`. Kode yang sama diekspos melalui REST, gRPC, dan WebSocket secara otomatis.
 
@@ -308,7 +329,7 @@ wscat -c "ws://localhost:8080/ws?user_id=123"
 
 ### WebSocket Multi-node (Redis Pub/Sub)
 
-Setiap panggilan `PublishChannel` otomatis mempublikasikan ke `rancago:ws:{channel}` di Redis. Semua instance yang berjalan berlangganan dan meneruskan pesan ke client lokal mereka — tanpa sticky session.
+Setiap panggilan `PublishChannel` otomatis mempublikasikan ke `rancago:ws:{channel}` di Redis. Semua instance yang berjalan berlangganan dan meneruskan pesan ke client lokal mereka - tanpa sticky session.
 
 ```bash
 # Node 1
@@ -323,7 +344,7 @@ User A di `:8080` mengirim ke `room:123` → User B di `:8081` menerimanya secar
 ### pgvector Semantic Search
 
 ```go
-// Cosine similarity search — mengembalikan dokumen yang paling mirip secara semantik dengan query
+// Cosine similarity search - mengembalikan dokumen yang paling mirip secara semantik dengan query
 threshold := float64(0.75)
 results, _ := docRepo.SimilaritySearch(ctx, queryEmbedding, 10, &threshold)
 for _, hit := range results {
@@ -376,8 +397,8 @@ UTILITAS
 
 | Modul | SRP | OCP | LSP | ISP | DIP |
 |---|---|---|---|---|---|
-| **Storage** | ✅ Manager / Driver / Provider masing-masing satu tugas | ✅ `RegisterFactory` — tambah driver tanpa ubah Manager | ✅ MinIO ≡ S3 ≡ GDrive, sepenuhnya bisa saling tukar | ✅ Interface 13 method, tidak ada yang tidak relevan | ✅ Bergantung pada `Contracts.StorageDriver` |
-| **OAuth** | ✅ Generic provider + wrapper named terpisah | ✅ `RegisterDriver` — tambah OIDC/Keycloak tanpa ubah SocialiteManager | ✅ Semua mengembalikan `SocialUser` | ✅ Interface 4 method yang ramping | ✅ `Contracts.AuthProvider` |
+| **Storage** | ✅ Manager / Driver / Provider masing-masing satu tugas | ✅ `RegisterFactory` - tambah driver tanpa ubah Manager | ✅ MinIO ≡ S3 ≡ GDrive, sepenuhnya bisa saling tukar | ✅ Interface 13 method, tidak ada yang tidak relevan | ✅ Bergantung pada `Contracts.StorageDriver` |
+| **OAuth** | ✅ Generic provider + wrapper named terpisah | ✅ `RegisterDriver` - tambah OIDC/Keycloak tanpa ubah SocialiteManager | ✅ Semua mengembalikan `SocialUser` | ✅ Interface 4 method yang ramping | ✅ `Contracts.AuthProvider` |
 | **Transport** | ✅ Adapter REST / gRPC / WS masing-masing satu format | ✅ Tambah GraphQL = file adapter baru | ✅ Semua memanggil `Contracts.NotificationService` | ✅ Tidak ada method REST di adapter WS | ✅ Semua bergantung pada contract service |
 | **RBAC** | ✅ Auth, role, dan permission terpisah | ✅ Tambah pengecekan permission tanpa ubah RBACService | ✅ Berbasis Redis ≡ in-memory, bisa saling tukar | ✅ Interface minimal per concern | ✅ `Contracts.RBACService` |
 
@@ -385,14 +406,14 @@ UTILITAS
 
 ## Checklist Produksi
 
-1. **Config** — override via env var (`APP_KEY`, `DB_*`, `REDIS_*`). Ganti `APP_KEY` dari nilai default.
-2. **PostgreSQL** — set `SetMaxOpenConns(100)`, `SetMaxIdleConns(25)`. Aktifkan `pg_stat_statements`. Buat HNSW index pgvector sebelum live.
-3. **Redis** — aktifkan persistensi RDB/AOF untuk data RBAC. Gunakan Cluster Mode di atas 1 juta koneksi WebSocket.
-4. **WebSocket** — pasang Nginx/HAProxy di depan. Pub/Sub `rancago:ws:*` membuat sticky session menjadi opsional.
-5. **Storage** — gunakan HTTPS untuk S3/MinIO. Set expiry presigned URL < 15 menit untuk file privat.
-6. **OAuth** — gunakan redirect URL HTTPS di produksi. Simpan `oauth_state` di Redis atau signed cookie.
-7. **Google API** — aktifkan Domain-Wide Delegation pada Service Account untuk impersonasi Calendar.
-8. **Observabilitas** — ekspor metrik Prometheus dari Redis `INFO stats`, `pg_stat_statements`, dan `connected_count` WebSocket.
+1. **Config** - override via env var (`APP_KEY`, `DB_*`, `REDIS_*`). Ganti `APP_KEY` dari nilai default.
+2. **PostgreSQL** - set `SetMaxOpenConns(100)`, `SetMaxIdleConns(25)`. Aktifkan `pg_stat_statements`. Buat HNSW index pgvector sebelum live.
+3. **Redis** - aktifkan persistensi RDB/AOF untuk data RBAC. Gunakan Cluster Mode di atas 1 juta koneksi WebSocket.
+4. **WebSocket** - pasang Nginx/HAProxy di depan. Pub/Sub `rancago:ws:*` membuat sticky session menjadi opsional.
+5. **Storage** - gunakan HTTPS untuk S3/MinIO. Set expiry presigned URL < 15 menit untuk file privat.
+6. **OAuth** - gunakan redirect URL HTTPS di produksi. Simpan `oauth_state` di Redis atau signed cookie.
+7. **Google API** - aktifkan Domain-Wide Delegation pada Service Account untuk impersonasi Calendar.
+8. **Observabilitas** - ekspor metrik Prometheus dari Redis `INFO stats`, `pg_stat_statements`, dan `connected_count` WebSocket.
 
 ---
 
@@ -418,8 +439,8 @@ UTILITAS
 
 ## Lisensi
 
-Proprietary — Muhammad Ikhwan Fathulloh © 2026. Rancago Framework 1.0.0.
+Proprietary - Muhammad Ikhwan Fathulloh © 2026. Rancago Framework 1.0.0.
 
 ---
 
-> **Rancago**: Produktivitas Laravel, idiom Go — typed, solid, dan siap scale.
+> **Rancago**: Produktivitas Laravel, idiom Go - typed, solid, dan siap scale.
