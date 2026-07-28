@@ -56,6 +56,8 @@ func RunCLI() int {
 		return runCmd(commands.NewMigrateCommand(), args)
 	case "scaffold":
 		return runCmd(commands.NewScaffoldCommand(), args)
+	case "make:feature":
+		return runCmd(commands.NewMakeFeatureCommand(), args)
 	case "make:entity":
 		return runCmd(commands.NewMakeEntityCommand(), args)
 	case "make:value-object", "make:vo":
@@ -101,6 +103,7 @@ func printUsage() {
 		{"serve", "Start the HTTP (and optional gRPC) development server"},
 		{"migrate", "Run database migrations (stub)"},
 		{"scaffold [name]", "Interactive scaffolder for a bounded context"},
+		{"make:feature [name]", "Scaffold feature + generate FEATURE.md for AI vibe coding"},
 		{"", ""},
 		{"Code generation:", ""},
 		{"  make:entity [name]", "Create a domain entity"},

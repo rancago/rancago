@@ -578,6 +578,55 @@ func NewScaffoldCommand() *SimpleCommand {
 				}
 			}
 			fmt.Printf("\n  ✅ Scaffold %q done! Wire adapters in internal/bootstrap and you're live.\n", ask.Name)
+
+			// Auto-generate FEATURE.md for AI vibe coding
+			var generated []generatedFile
+			if ask.HasEntity {
+				generated = append(generated, generatedFile{
+					Layer: "Domain Entity",
+					Path:  "internal/domain/entities/" + toPascal(ask.Name) + ".go",
+					Role:  "Core business object with state and behavior",
+				})
+			}
+			if ask.HasRepo {
+				generated = append(generated, generatedFile{
+					Layer: "Driven Port (Repository interface)",
+					Path:  "internal/ports/driven/" + toPascal(ask.Name) + "Repository.go",
+					Role:  "Outbound persistence contract",
+				})
+			}
+			if ask.HasUC {
+				generated = append(generated, generatedFile{
+					Layer: "Driving Port (Use Case interface)",
+					Path:  "internal/ports/driving/" + toPascal(ask.Name) + "UseCase.go",
+					Role:  "Inbound contract — what HTTP/gRPC/CLI can call",
+				})
+				generated = append(generated, generatedFile{
+					Layer: "Application Use Case (Interactor)",
+					Path:  "internal/application/usecases/" + toSnake(ask.Name) + "_usecase.go",
+					Role:  "Business logic — orchestrates domain + driven ports",
+				})
+			}
+			if ask.HasHTTP {
+				generated = append(generated, generatedFile{
+					Layer: "Driving Adapter (HTTP Handler)",
+					Path:  "internal/adapters/driving/" + toSnake(ask.Name) + "handler/" + toSnake(ask.Name) + "handler_adapter.go",
+					Role:  "HTTP entry point",
+				})
+			}
+			if ask.HasGRPC {
+				generated = append(generated, generatedFile{
+					Layer: "Driving Adapter (gRPC)",
+					Path:  "internal/adapters/driving/" + toSnake(ask.Name) + "grpc/" + toSnake(ask.Name) + "grpc_adapter.go",
+					Role:  "gRPC entry point stub",
+				})
+			}
+			mdPath, err := writeFeatureMarkdown(ask.Name, "", generated, ask)
+			if err != nil {
+				fmt.Printf("  ⚠️  Could not write FEATURE.md: %v\n", err)
+			} else {
+				fmt.Printf("  📄 AI context: %s\n", mdPath)
+			}
 			return nil
 		},
 	}
