@@ -21,10 +21,10 @@ func (c *SimpleCommand) SetArgs(a []string) {
 func (c *SimpleCommand) Execute() error {
 	args := c.flags.Args()
 	if c.argsMin > 0 && len(args) < c.argsMin {
-		return fmt.Errorf("usage: gawego %s - %s (missing required args)", c.use, c.short)
+		return fmt.Errorf("usage: rancago %s - %s (missing required args)", c.use, c.short)
 	}
 	if c.argsMax >= 0 && len(args) > c.argsMax {
-		return fmt.Errorf("usage: gawego %s - too many arguments", c.use)
+		return fmt.Errorf("usage: rancago %s - too many arguments", c.use)
 	}
 	return c.runFn(c.flags, args)
 }

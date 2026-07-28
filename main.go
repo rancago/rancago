@@ -14,12 +14,12 @@ import (
 func main() {
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
 	log.Println(`
-   ______       _       __
-  / ____/___ _/ |     / /__  ____ _____
- / / __/ __  /| | /| / / _ \/ __  / __ \
-/ /_/ / /_/ / | |/ |/ /  __/ /_/ / /_/ /
-\____/\__,_/  |__/|__/\___/\__, /\____/
-                          /____/
+  ____                                        
+ |  _ \ __ _ _ __   ___ __ _  __ _  ___  
+ | |_) / _' | '_ \ / __/ _' |/ _' |/ _ \ 
+ |  _ < (_| | | | | (_| (_| | (_| | (_) |
+ |_| \_\__,_|_| |_|\___\__,_|\__, |\___/ 
+                               |___/      
 `)
 	app := bootstrap.New()
 	log.Println("[rancago] Bootstrapping application (hexagonal architecture)...")
