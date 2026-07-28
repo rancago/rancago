@@ -2,10 +2,12 @@
 *.exe
 *.out
 dist/
+.vscode/
 
 # Sub-repos - each has its own git repo
 rancago-cli/
 rancago-install/
+rancago-framework-documentation/
 
 # Go
 vendor/

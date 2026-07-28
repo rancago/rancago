@@ -437,6 +437,12 @@ UTILITIES
 
 ---
 
+## Contributing
+
+Please read [CONTRIBUTING.md](https://github.com/rancago/rancago/blob/main/CONTRIBUTING.md) before opening an issue or pull request.
+
+---
+
 ## License
 
 MIT License - Copyright (c) 2026 [Muhammad Ikhwan Fathulloh](https://github.com/ikhwanfathulloh)
