@@ -14,12 +14,12 @@ CONTEXT_END -->
 <!-- INSTRUCTION
 Read this file FIRST before any edit. Follow hexagonal rules:
 1. Domain entities MUST NOT import ports or adapters.
-2. Ports are Go interfaces only — no implementations.
+2. Ports are Go interfaces only - no implementations.
 3. Use cases depend on driven ports (injected via constructor).
-4. Adapters depend on driving ports — never on use case structs directly.
+4. Adapters depend on driving ports - never on use case structs directly.
 5. Wire new bindings in internal/bootstrap/app.go (Container.Singleton).
 6. Use derrors.New(op, sentinel, msg) for domain errors.
-7. IDs use valueobjects.ID — call valueobjects.NewIDStr() or NewIDUint().
+7. IDs use valueobjects.ID - call valueobjects.NewIDStr() or NewIDUint().
 INSTRUCTION -->
 
 ## 📁 Files
@@ -27,10 +27,10 @@ INSTRUCTION -->
 | Layer | File | Role |
 |-------|------|------|
 | Domain Entity | `internal/domain/entities/Notification.go` | Notification with channel enum, read-state, data map |
-| Driven Port | `internal/ports/driven/notification.go` | NotificationRepository — CRUD + FindByUserID + MarkRead + GetUnreadCount |
-| Driving Port | `internal/ports/driving/notification.go` | NotificationUseCase — Send, Broadcast, ListUserNotifications, MarkRead, GetUnreadCount |
+| Driven Port | `internal/ports/driven/notification.go` | NotificationRepository - CRUD + FindByUserID + MarkRead + GetUnreadCount |
+| Driving Port | `internal/ports/driving/notification.go` | NotificationUseCase - Send, Broadcast, ListUserNotifications, MarkRead, GetUnreadCount |
 | Use Case | `internal/application/usecases/notification_usecase.go` | Orchestrates repo + cache (Redis unread counter) + WebSocket push |
-| HTTP Adapter | `internal/adapters/driving/http/handlers.go` | NotificationHandler — /send /broadcast /list /count /read |
+| HTTP Adapter | `internal/adapters/driving/http/handlers.go` | NotificationHandler - /send /broadcast /list /count /read |
 | gRPC Adapter | `internal/adapters/driving/grpc/notification_adapter.go` | GRPCNotificationAdapter stub |
 | In-Memory Repo | `internal/adapters/driven/persistence/inmemory/notification_repo.go` | In-memory implementation for dev/test |
 
@@ -72,7 +72,7 @@ OUTPUT_HINTS -->
 
 | Task | Where |
 |------|-------|
-| Add channel type | `internal/domain/entities/Notification.go` — `NotificationChannel` const |
+| Add channel type | `internal/domain/entities/Notification.go` - `NotificationChannel` const |
 | Add use case method | Port: `internal/ports/driving/notification.go` → Interactor: `notification_usecase.go` |
 | Add HTTP route | `internal/adapters/driving/http/handlers.go` `RegisterRoutes()` |
 | Swap Redis → real impl | Create `internal/adapters/driven/cache/redis_adapter.go`, wire in bootstrap |
@@ -89,16 +89,16 @@ derrors.New("notification.mark_read", derrors.ErrNotFound, "notification not fou
 
 | Method | Path | Handler |
 |--------|------|---------|
-| POST | `/api/v1/notifications/send` | `handleSend` — body: `{user_id, title, body, channel, data}` |
-| POST | `/api/v1/notifications/broadcast` | `handleBroadcast` — body: `{title, body, data}` |
+| POST | `/api/v1/notifications/send` | `handleSend` - body: `{user_id, title, body, channel, data}` |
+| POST | `/api/v1/notifications/broadcast` | `handleBroadcast` - body: `{title, body, data}` |
 | GET | `/api/v1/notifications/list?user_id=&page=&per_page=` | `handleList` |
 | GET | `/api/v1/notifications/count?user_id=` | `handleCount` |
-| POST | `/api/v1/notifications/read` | `handleMarkRead` — body: `{id, user_id}` |
+| POST | `/api/v1/notifications/read` | `handleMarkRead` - body: `{id, user_id}` |
 
 ## 🏷️ Channels
 
 ```go
-entities.ChannelDatabase  // default — persisted in DB
+entities.ChannelDatabase  // default - persisted in DB
 entities.ChannelEmail     // email transport
 entities.ChannelPush      // push notification
 entities.ChannelSMS       // SMS

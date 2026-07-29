@@ -1,7 +1,7 @@
 # 🧠 Rancago Framework - Skill Matrix & Vibe Code Guide
 
 > **Vibe Code Philosophy**: Produktif seperti Laravel, idiomatik seperti Go, skala enterprise tanpa ribet.
-> Rancago bukan sekadar framework — ini adalah *state of mind*: **Contracts First, Providers Second, Services Third**.
+> Rancago bukan sekadar framework - ini adalah *state of mind*: **Contracts First, Providers Second, Services Third**.
 
 ---
 
@@ -25,18 +25,18 @@
 
 ---
 
-## 🏗 Architecture Vibe Code — The Rancago Way
+## 🏗 Architecture Vibe Code - The Rancago Way
 
 ### Two Complementary Layers
 
 ```
 Framework Layer (app/ + framework/)          Hexagonal Layer (internal/)
 ────────────────────────────────             ──────────────────────────────────
-app/Contracts/   — interfaces                internal/domain/         — entities + VOs + errors
-app/Providers/   — DI wiring                 internal/ports/          — driven + driving interfaces
-app/Services/    — business logic            internal/application/    — use case interactors
-framework/       — implementations           internal/adapters/       — HTTP/gRPC/CLI/DB/Cache
-bootstrap/app.go — dual-container boot       internal/bootstrap/      — internal wiring
+app/Contracts/   - interfaces                internal/domain/         - entities + VOs + errors
+app/Providers/   - DI wiring                 internal/ports/          - driven + driving interfaces
+app/Services/    - business logic            internal/application/    - use case interactors
+framework/       - implementations           internal/adapters/       - HTTP/gRPC/CLI/DB/Cache
+bootstrap/app.go - dual-container boot       internal/bootstrap/      - internal wiring
 ```
 
 New features → use the **hexagonal layer** (`internal/`). Existing framework layer stays for backward compat.
@@ -45,7 +45,7 @@ New features → use the **hexagonal layer** (`internal/`). Existing framework l
 
 ```
 1. CONTRACTS (app/Contracts/*.go)
-   └── Define ALL interfaces FIRST — ISP & DIP compliance
+   └── Define ALL interfaces FIRST - ISP & DIP compliance
 
 2. PROVIDERS (app/Providers/*.go)
    └── Register(Bind/Singleton) → Boot() wire adapters
@@ -64,21 +64,21 @@ Dependency direction is strictly one-way. Never reverse it.
 
 ---
 
-## 📐 Rule #1 — Contracts Always Come First
+## 📐 Rule #1 - Contracts Always Come First
 
 ```go
-// ❌ Bad — direct coupling to implementation
+// ❌ Bad - direct coupling to implementation
 type FileService struct {
     Minio *minio.Client
 }
 
-// ✅ Good — depend on abstraction, swap driver freely
+// ✅ Good - depend on abstraction, swap driver freely
 type FileService struct {
     Storage Contracts.StorageDriver
 }
 ```
 
-## 📐 Rule #2 — ServiceProvider is the Only Registration Point
+## 📐 Rule #2 - ServiceProvider is the Only Registration Point
 
 ```go
 // app/Providers/PaymentServiceProvider.go
@@ -108,7 +108,7 @@ func (a *Application) RegisterCore() {
 }
 ```
 
-## 📐 Rule #3 — Container Naming Convention
+## 📐 Rule #3 - Container Naming Convention
 
 | Tipe | Format | Contoh |
 |---|---|---|
@@ -125,7 +125,7 @@ func (a *Application) RegisterCore() {
 
 ## 📁 Folder-by-Folder Conventions
 
-### `app/Contracts/` — The Interface Bible
+### `app/Contracts/` - The Interface Bible
 
 All cross-module dependencies go through Contracts only. Never cross-import concrete structs.
 
@@ -138,15 +138,15 @@ All cross-module dependencies go through Contracts only. Never cross-import conc
 | `database.go` | Generic Repository + Vector + Transaction | Generics + Unit of Work |
 | `notification.go` | NotificationService transport-agnostic | Interface Segregation |
 
-### `app/Providers/` — Wiring Central
+### `app/Providers/` - Wiring Central
 
 Every Provider must:
 1. Implement `Contracts.ServiceProvider` (Register + Boot)
 2. File name: `{Domain}ServiceProvider.go`
-3. Register: bind to Container only — no heavy logic
+3. Register: bind to Container only - no heavy logic
 4. Boot: runtime wire-up (register drivers, seed, migrations)
 
-### `app/Services/` — Business Logic
+### `app/Services/` - Business Logic
 
 ```go
 // ❌ NEVER import these in Services
@@ -162,14 +162,14 @@ func NewNotificationService(redis *Cache.RedisManager, hub *WebSocket.Hub) Contr
 }
 
 func (s *NotificationService) Send(ctx context.Context, n *Contracts.Notification) (*Contracts.Notification, error) {
-    // Pure business logic — no HTTP/gRPC/WS here
+    // Pure business logic - no HTTP/gRPC/WS here
 }
 ```
 
-### `internal/` — Hexagonal Architecture (Canonical for New Features)
+### `internal/` - Hexagonal Architecture (Canonical for New Features)
 
 ```go
-// Constructor in use case — injects driven ports, returns driving port interface
+// Constructor in use case - injects driven ports, returns driving port interface
 func NewFooInteractor(repo driven.FooRepository) driving.FooUseCase {
     return &FooInteractor{repo: repo}
 }
@@ -202,7 +202,7 @@ storage.Put(ctx, "avatar.jpg", file,
 ### Proxy Driver Pattern
 
 ```go
-// Returns StorageDriver interface directly — inject anywhere
+// Returns StorageDriver interface directly - inject anywhere
 proxy := storageMgr.Proxy("google_drive")
 ```
 
@@ -247,7 +247,7 @@ func NewNotificationService(redis *Cache.RedisManager, hub *WebSocket.Hub) *InMe
 ### Domain Errors (Hexagonal Layer)
 
 ```go
-// Always use derrors — never raw fmt.Errorf for business errors
+// Always use derrors - never raw fmt.Errorf for business errors
 return derrors.New("foo.create", derrors.ErrValidation, "name is required")
 
 // Available sentinels:
@@ -292,37 +292,37 @@ func (s *Service) ProcessOrder(orderID string) error { ... }
 
 ---
 
-## 🧪 Workflow: Add New Feature — Step by Step
+## 🧪 Workflow: Add New Feature - Step by Step
 
 Contoh: tambah fitur **Payment Gateway**.
 
 ```
-Step 1 — Scaffold (pakai CLI):
+Step 1 - Scaffold (pakai CLI):
   rancago make:feature Payment
 
-Step 2 — Define Contract (framework layer) or edit generated port (hexagonal):
+Step 2 - Define Contract (framework layer) or edit generated port (hexagonal):
   app/Contracts/payment.go  OR  internal/ports/driving/payment_usecase.go
 
-Step 3 — Implement driver (OCP):
+Step 3 - Implement driver (OCP):
   framework/Payment/Drivers/midtrans.go
 
-Step 4 — Business Service / Use Case:
+Step 4 - Business Service / Use Case:
   app/Services/PaymentService.go  OR  internal/application/usecases/payment_usecase.go
 
-Step 5 — ServiceProvider wiring:
+Step 5 - ServiceProvider wiring:
   app/Providers/PaymentServiceProvider.go
 
-Step 6 — Register di bootstrap:
+Step 6 - Register di bootstrap:
   bootstrap/app.go  →  RegisterCore()  →  tambah PaymentServiceProvider
 
-Step 7 — Transport adapters:
+Step 7 - Transport adapters:
   framework/Transport/PaymentTransport.go  (REST + gRPC)
   OR driving adapter sudah di-generate oleh make:feature
 ```
 
 ---
 
-## ✅ Vibe Code Checklist — Sebelum Commit
+## ✅ Vibe Code Checklist - Sebelum Commit
 
 - [ ] Semua dependency baru punya Contract di `app/Contracts/` atau port di `internal/ports/`?
 - [ ] Service/use case menggunakan constructor injection (tidak ada global)?
@@ -349,7 +349,7 @@ c.Resolve("key")      // Get instance
 c.MustResolve("key")  // Get, panic on miss
 c.Has("key")          // Check binding
 
-// ====== CONTAINER (internal/kernel) — same API ======
+// ====== CONTAINER (internal/kernel) - same API ======
 a.Container.Singleton("repo.foo", func(c *kernel.Container) (interface{}, error) { ... })
 a.Container.Alias("uc.foo", "driving.FooUseCase")
 
@@ -382,4 +382,4 @@ email, err := valueobjects.NewEmail("user@example.com")
 ---
 
 > 🚀 **Remember the Vibe**: "Think in Contracts, Build with Providers, Scale with Services."
-> Rancago bukan tentang seberapa banyak fitur — tapi seberapa mudah fitur itu ditambah tanpa merusak yang ada.
+> Rancago bukan tentang seberapa banyak fitur - tapi seberapa mudah fitur itu ditambah tanpa merusak yang ada.

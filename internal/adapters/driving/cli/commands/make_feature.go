@@ -81,7 +81,7 @@ func NewMakeFeatureCommand() *SimpleCommand {
 				generated = append(generated, generatedFile{
 					Layer: "Driven Port (Repository interface)",
 					Path:  "internal/ports/driven/" + toPascal(ask.Name) + "Repository.go",
-					Role:  "Outbound persistence contract — swap DB without touching business logic",
+					Role:  "Outbound persistence contract - swap DB without touching business logic",
 				})
 			}
 			if ask.HasUC {
@@ -91,7 +91,7 @@ func NewMakeFeatureCommand() *SimpleCommand {
 				generated = append(generated, generatedFile{
 					Layer: "Driving Port (Use Case interface)",
 					Path:  "internal/ports/driving/" + toPascal(ask.Name) + "UseCase.go",
-					Role:  "Inbound contract — what HTTP/gRPC/CLI can call",
+					Role:  "Inbound contract - what HTTP/gRPC/CLI can call",
 				})
 				if err := runSub(NewMakeUsecaseCommand(), ask.Name); err != nil {
 					return err
@@ -99,7 +99,7 @@ func NewMakeFeatureCommand() *SimpleCommand {
 				generated = append(generated, generatedFile{
 					Layer: "Application Use Case (Interactor)",
 					Path:  "internal/application/usecases/" + toSnake(ask.Name) + "_usecase.go",
-					Role:  "Business logic — orchestrates domain + driven ports",
+					Role:  "Business logic - orchestrates domain + driven ports",
 				})
 			}
 			if ask.HasHTTP {
@@ -109,7 +109,7 @@ func NewMakeFeatureCommand() *SimpleCommand {
 				generated = append(generated, generatedFile{
 					Layer: "Driving Adapter (HTTP Handler)",
 					Path:  "internal/adapters/driving/" + toSnake(ask.Name) + "handler/" + toSnake(ask.Name) + "handler_adapter.go",
-					Role:  "HTTP entry point — decode request, call use case, encode response",
+					Role:  "HTTP entry point - decode request, call use case, encode response",
 				})
 			}
 			if ask.HasGRPC {
@@ -173,12 +173,12 @@ func writeFeatureMarkdown(name, desc string, files []generatedFile, ask scaffold
 	sb.WriteString("<!-- INSTRUCTION\n")
 	sb.WriteString("Read this file FIRST before any edit. Follow hexagonal rules:\n")
 	sb.WriteString("1. Domain entities MUST NOT import ports or adapters.\n")
-	sb.WriteString("2. Ports are Go interfaces only — no implementations.\n")
+	sb.WriteString("2. Ports are Go interfaces only - no implementations.\n")
 	sb.WriteString("3. Use cases depend on driven ports (injected via constructor).\n")
-	sb.WriteString("4. Adapters depend on driving ports — never on use case structs directly.\n")
+	sb.WriteString("4. Adapters depend on driving ports - never on use case structs directly.\n")
 	sb.WriteString("5. Wire new bindings in internal/bootstrap/app.go (Container.Singleton).\n")
 	sb.WriteString("6. Use derrors.New(op, sentinel, msg) for domain errors.\n")
-	sb.WriteString("7. IDs use valueobjects.ID — call valueobjects.NewIDStr() or NewIDUint().\n")
+	sb.WriteString("7. IDs use valueobjects.ID - call valueobjects.NewIDStr() or NewIDUint().\n")
 	sb.WriteString("INSTRUCTION -->\n\n")
 
 	// ── Files ────────────────────────────────────────────────────────────────
@@ -206,12 +206,12 @@ func writeFeatureMarkdown(name, desc string, files []generatedFile, ask scaffold
 	sb.WriteString("## 🔌 Bootstrap Wiring\n\n")
 	sb.WriteString("Add to `internal/bootstrap/app.go` inside `RegisterCore()`:\n\n")
 	sb.WriteString("```go\n")
-	sb.WriteString("// " + pascal + " — repository\n")
+	sb.WriteString("// " + pascal + " - repository\n")
 	sb.WriteString("a.Container.Singleton(\"repo." + toSnake(name) + "\", func(c *kernel.Container) (interface{}, error) {\n")
 	sb.WriteString("    return inmemory.NewInMemory" + pascal + "Repo(), nil\n")
 	sb.WriteString("})\n")
 	if ask.HasUC {
-		sb.WriteString("\n// " + pascal + " — use case\n")
+		sb.WriteString("\n// " + pascal + " - use case\n")
 		sb.WriteString("a.Container.Singleton(\"uc." + toSnake(name) + "\", func(c *kernel.Container) (interface{}, error) {\n")
 		sb.WriteString("    repoRaw, _ := c.Resolve(\"repo." + toSnake(name) + "\")\n")
 		sb.WriteString("    return usecases.New" + pascal + "Interactor(\n")
@@ -221,7 +221,7 @@ func writeFeatureMarkdown(name, desc string, files []generatedFile, ask scaffold
 		sb.WriteString("a.Container.Alias(\"uc." + toSnake(name) + "\", \"driving." + pascal + "UseCase\")\n")
 	}
 	if ask.HasHTTP {
-		sb.WriteString("\n// " + pascal + " — HTTP handler\n")
+		sb.WriteString("\n// " + pascal + " - HTTP handler\n")
 		sb.WriteString("// In BuildHTTPServer():\n")
 		sb.WriteString("ucRaw, _ := a.Container.Resolve(\"uc." + toSnake(name) + "\")\n")
 		sb.WriteString("nh := " + toSnake(name) + "handler.New" + pascal + "HandlerAdapter(ucRaw.(driving." + pascal + "UseCase))\n")

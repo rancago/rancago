@@ -29,10 +29,10 @@ Rancago adalah framework backend berbasis **Go 1.23+** yang mengadopsi DX (Devel
 
 ### Target Persona
 
-1. **👨‍💻 Go Backend Engineer** — Ingin produktivitas Laravel tanpa meninggalkan performa & type safety Go.
-2. **🏢 Startup CTO** — Butuh framework yang bisa scale dari MVP ke 1M+ user tanpa rewrite total.
-3. **🎓 Software Architect** — Mengutamakan SOLID, testability, dan modular design yang enforce pattern.
-4. **🔧 Ex-Laravel Developer yang belajar Go** — Ingin familiar workflow tapi idiomatik di Go.
+1. **👨‍💻 Go Backend Engineer** - Ingin produktivitas Laravel tanpa meninggalkan performa & type safety Go.
+2. **🏢 Startup CTO** - Butuh framework yang bisa scale dari MVP ke 1M+ user tanpa rewrite total.
+3. **🎓 Software Architect** - Mengutamakan SOLID, testability, dan modular design yang enforce pattern.
+4. **🔧 Ex-Laravel Developer yang belajar Go** - Ingin familiar workflow tapi idiomatik di Go.
 
 ---
 
@@ -106,7 +106,7 @@ rancago/
 │   │   └── redis.go        # Connection + PubSub + RateLimiter
 │   ├── Container/
 │   │   └── container.go    # Bind/Singleton/Instance/Alias/Resolve
-│   ├── Database/           # (legacy layer — use internal/ports for new features)
+│   ├── Database/           # (legacy layer - use internal/ports for new features)
 │   ├── Google/
 │   │   ├── calendar.go
 │   │   └── meet.go
@@ -172,7 +172,7 @@ Response kembali ke Transport Adapter → serialized → Client
 - [x] FR-F1-02: Support **Alias** mapping (e.g. `Contracts.NotificationService` → `service.notification`)
 - [x] FR-F1-03: `Resolve(abstract string) (interface{}, error)` + `MustResolve(abstract string) interface{}`
 - [x] FR-F1-04: Thread-safe dengan `sync.RWMutex`
-- [x] FR-F1-05: `Call(fn interface{})` — auto-resolve parameter function via reflection
+- [x] FR-F1-05: `Call(fn interface{})` - auto-resolve parameter function via reflection
 - [x] FR-F1-06: `Has(abstract string) bool`
 
 #### Non-Functional Requirements (NFR):
@@ -214,7 +214,7 @@ Response kembali ke Transport Adapter → serialized → Client
 - [x] FR-F3-03: 3 Drivers: **MinIO** + **Amazon S3** + **Google Drive**
 - [x] FR-F3-04: Lazy Disk Initialization
 - [x] FR-F3-05: `RegisterFactory(driverType, factory)` untuk tambah driver tanpa ubah Manager
-- [x] FR-F3-06: Proxy Pattern — `Proxy(name)` returns `StorageDriver` untuk constructor injection
+- [x] FR-F3-06: Proxy Pattern - `Proxy(name)` returns `StorageDriver` untuk constructor injection
 - [x] FR-F3-07: Default disk configurable via `StorageConfig.Default`
 - [x] FR-F3-08: Container binding key: `"storage"`, alias `"Contracts.StorageDriver"`
 
@@ -253,7 +253,7 @@ Response kembali ke Transport Adapter → serialized → Client
 
 ---
 
-### 3.6 F6: Database — Generic Repository + pgvector
+### 3.6 F6: Database - Generic Repository + pgvector
 
 **Priority**: P0 (Must Have)
 **Reference Files**: `app/Contracts/database.go` + `app/Models/vector.go` + `app/Models/models.go`
@@ -287,7 +287,7 @@ Response kembali ke Transport Adapter → serialized → Client
 
 #### FR:
 - [x] FR-F8-01: 3 message type: Direct (user) / Channel (room) / Broadcast (all)
-- [x] FR-F8-02: Multi-node scale via Redis Pub/Sub — `Rancago:ws:{channelName}`
+- [x] FR-F8-02: Multi-node scale via Redis Pub/Sub - `Rancago:ws:{channelName}`
 - [x] FR-F8-03: Handshake: `ws://host/ws?user_id=xxx`
 - [x] FR-F8-04: JSON envelope: `{"type":"...","channel":"...","payload":{...}}`
 - [x] FR-F8-05: Heartbeat ping/pong + graceful disconnect
@@ -331,7 +331,7 @@ Response kembali ke Transport Adapter → serialized → Client
 **Reference Files**: `config/config.go` + `internal/kernel/config.go`
 
 #### FR:
-- [x] FR-F10-01: 100% typed struct — tidak ada `map[string]interface{}` untuk config
+- [x] FR-F10-01: 100% typed struct - tidak ada `map[string]interface{}` untuk config
 - [x] FR-F10-02: `Load()` returns `*Config` dengan default value siap pakai
 - [x] FR-F10-03: Config structs: AppConfig / DatabaseConfig / StorageConfig / GoogleConfig / RedisConfig / AuthConfig / ServerConfig
 
@@ -425,11 +425,11 @@ service NotificationService {
 
 | Komponen | Minimum Version | Resource |
 |---|---|---|
-| **Go Runtime** | 1.23.4 | — |
+| **Go Runtime** | 1.23.4 | - |
 | **PostgreSQL** | 14+ + extension `vector` | 2 vCPU / 4GB RAM |
 | **Redis** | 6+ (RDB/AOF persistence) | 1 vCPU / 2GB RAM |
 | **MinIO / S3 Compatible** | Latest | 1 vCPU / 2GB RAM |
-| **Load Balancer** | Nginx / HAProxy | — |
+| **Load Balancer** | Nginx / HAProxy | - |
 
 ### 6.2 Production Checklist
 
@@ -480,20 +480,20 @@ service NotificationService {
 - [x] Typed Struct Configuration
 
 ### Milestone 1.1 (Q3 2026)
-- [ ] Queue Worker System (Redis Streams) — Horizon-style
+- [ ] Queue Worker System (Redis Streams) - Horizon-style
 - [ ] Validation Package (go-playground/validator wrapper)
 - [ ] Cursor-based Pagination + JSON:API spec
 - [ ] Structured Logging (zerolog) + trace ID middleware
 - [ ] CORS Middleware bawaan
 
 ### Milestone 1.2 (Q4 2026)
-- [ ] GraphQL Adapter (gqlgen) — Transport ke-4
+- [ ] GraphQL Adapter (gqlgen) - Transport ke-4
 - [ ] SSE (Server-Sent Events) Adapter
 - [ ] Rate Limiter Middleware (Redis sliding window)
-- [ ] Testing Helpers — Container mock, Storage fake driver
+- [ ] Testing Helpers - Container mock, Storage fake driver
 
 ### Milestone 2.0 (2027)
-- [ ] Rancago Admin Panel — Auto CRUD UI dari GORM Models
+- [ ] Rancago Admin Panel - Auto CRUD UI dari GORM Models
 - [ ] Multi-Tenancy Package (schema/column-based)
 - [ ] Extract `framework/` ke Go module terpisah
 - [ ] `rancago new my-project` skeleton installer
@@ -506,9 +506,9 @@ service NotificationService {
 |---|---|---|
 | **S**ingle Responsibility | `StorageManager` hanya registry + lazy disk; `MinIODriver` hanya MinIO API | `framework/Storage/manager.go` vs `Drivers/` |
 | **O**pen/Closed | `RegisterFactory()` tambah driver tanpa ubah `StorageManager` | `framework/Storage/manager.go` |
-| **L**iskov Substitution | `MinIODriver ≡ GDriveDriver` — implement `StorageDriver`, swap tanpa ubah consumer | `app/Contracts/storage.go` |
+| **L**iskov Substitution | `MinIODriver ≡ GDriveDriver` - implement `StorageDriver`, swap tanpa ubah consumer | `app/Contracts/storage.go` |
 | **I**nterface Segregation | `CalendarService` terpisah dari `MeetService` terpisah dari `MeetingScheduler` | `app/Contracts/google.go` |
-| **D**ependency Inversion | Use cases menerima driven ports via constructor — tidak ada global state | `internal/application/usecases/` |
+| **D**ependency Inversion | Use cases menerima driven ports via constructor - tidak ada global state | `internal/application/usecases/` |
 
 ---
 
@@ -553,4 +553,4 @@ service NotificationService {
 
 ---
 
-> 🚀 **Rancago 1.0.0**: Produktivitas tanpa mengorbankan prinsip. Kecepatan tanpa meninggalkan kualitas. Dari MVP 3 hari ke sistem 1 juta user — tanpa rewrite total.
+> 🚀 **Rancago 1.0.0**: Produktivitas tanpa mengorbankan prinsip. Kecepatan tanpa meninggalkan kualitas. Dari MVP 3 hari ke sistem 1 juta user - tanpa rewrite total.

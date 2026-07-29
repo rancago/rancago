@@ -599,12 +599,12 @@ func NewScaffoldCommand() *SimpleCommand {
 				generated = append(generated, generatedFile{
 					Layer: "Driving Port (Use Case interface)",
 					Path:  "internal/ports/driving/" + toPascal(ask.Name) + "UseCase.go",
-					Role:  "Inbound contract — what HTTP/gRPC/CLI can call",
+					Role:  "Inbound contract - what HTTP/gRPC/CLI can call",
 				})
 				generated = append(generated, generatedFile{
 					Layer: "Application Use Case (Interactor)",
 					Path:  "internal/application/usecases/" + toSnake(ask.Name) + "_usecase.go",
-					Role:  "Business logic — orchestrates domain + driven ports",
+					Role:  "Business logic - orchestrates domain + driven ports",
 				})
 			}
 			if ask.HasHTTP {

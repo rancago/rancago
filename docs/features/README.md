@@ -31,4 +31,4 @@ docs/features/notification.md
 Add a `DeleteAll` method that removes all notifications for a given user_id.
 ```
 
-The context file carries architecture rules, file paths, and output hints — no need to re-explain them every time.
+The context file carries architecture rules, file paths, and output hints - no need to re-explain them every time.

@@ -14,13 +14,13 @@ CONTEXT_END -->
 <!-- INSTRUCTION
 Read this file FIRST before any edit. Follow hexagonal rules:
 1. Domain entities MUST NOT import ports or adapters.
-2. Ports are Go interfaces only — no implementations.
+2. Ports are Go interfaces only - no implementations.
 3. Use cases depend on driven ports (injected via constructor).
-4. Adapters depend on driving ports — never on use case structs directly.
+4. Adapters depend on driving ports - never on use case structs directly.
 5. Wire new bindings in internal/bootstrap/app.go (Container.Singleton).
 6. Use derrors.New(op, sentinel, msg) for domain errors.
-7. IDs use valueobjects.ID — call valueobjects.NewIDStr() or NewIDUint().
-8. Email must be created via valueobjects.NewEmail() — validates format.
+7. IDs use valueobjects.ID - call valueobjects.NewIDStr() or NewIDUint().
+8. Email must be created via valueobjects.NewEmail() - validates format.
 INSTRUCTION -->
 
 ## 📁 Files
@@ -29,25 +29,25 @@ INSTRUCTION -->
 |-------|------|------|
 | Domain Entity | `internal/domain/entities/User.go` | User with email VO, roles, permissions, OAuth fields |
 | Domain Entity | `internal/domain/entities/Role.go` | Role with permission list |
-| Domain Entity | `internal/domain/entities/Permission.go` | Permission — name-based guard |
+| Domain Entity | `internal/domain/entities/Permission.go` | Permission - name-based guard |
 | Value Object | `internal/domain/valueobjects/email.go` | Email VO with validation |
 | Driven Port | `internal/ports/driven/auth.go` | SocialitePort, AuthProviderPort, OAuthToken, OAuthUser |
 | Driven Port | `internal/ports/driven/user.go` | UserRepository, RoleRepository, PermissionRepository |
-| Driving Port | `internal/ports/driving/user.go` | UserUseCase — Register, Login, FindByID, GetAuthURL, LoginWithProvider, AssignRole, HasPermission |
-| Use Case | `internal/application/usecases/user_usecase.go` | UserInteractor — auth + RBAC orchestration |
+| Driving Port | `internal/ports/driving/user.go` | UserUseCase - Register, Login, FindByID, GetAuthURL, LoginWithProvider, AssignRole, HasPermission |
+| Use Case | `internal/application/usecases/user_usecase.go` | UserInteractor - auth + RBAC orchestration |
 | In-Memory Repo | `internal/adapters/driven/persistence/inmemory/user_repo.go` | In-memory with role/permission attachment |
-| Auth Adapter | `internal/adapters/driven/auth/socialite.go` | SocialiteManager — multi-provider OAuth |
+| Auth Adapter | `internal/adapters/driven/auth/socialite.go` | SocialiteManager - multi-provider OAuth |
 
 ## 🏗️ Layer Flow
 
 ```
 POST /auth/register
-  └─ (HTTP Handler — not yet wired, add to BuildHTTPServer)
+  └─ (HTTP Handler - not yet wired, add to BuildHTTPServer)
        └─ UserUseCase.Register(ctx, name, email, password)
             └─ UserInteractor.Register()
-                 ├─ valueobjects.NewEmail(email)          — validates
-                 ├─ UserRepository.FindByEmail()          — check duplicate
-                 └─ UserRepository.Create()               — persist
+                 ├─ valueobjects.NewEmail(email)          - validates
+                 ├─ UserRepository.FindByEmail()          - check duplicate
+                 └─ UserRepository.Create()               - persist
 
 GET /auth/google/callback
   └─ UserUseCase.LoginWithProvider(ctx, "google", code)
@@ -94,7 +94,7 @@ OUTPUT_HINTS -->
 | Add role to user | `UserUseCase.AssignRole(ctx, userID, roleName)` |
 | Check permission | `UserUseCase.HasPermission(ctx, userID, permName)` |
 | Add User field | `internal/domain/entities/User.go` + migration |
-| HTTP routes | Add `UserHandler` in `internal/adapters/driving/http/` — not yet generated |
+| HTTP routes | Add `UserHandler` in `internal/adapters/driving/http/` - not yet generated |
 
 ## 🚨 Domain Errors
 

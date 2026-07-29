@@ -14,13 +14,13 @@ CONTEXT_END -->
 <!-- INSTRUCTION
 Read this file FIRST before any edit. Follow hexagonal rules:
 1. Domain entities MUST NOT import ports or adapters.
-2. Ports are Go interfaces only — no implementations.
+2. Ports are Go interfaces only - no implementations.
 3. Use cases depend on driven ports (injected via constructor).
-4. Adapters depend on driving ports — never on use case structs directly.
+4. Adapters depend on driving ports - never on use case structs directly.
 5. Wire new bindings in internal/bootstrap/app.go (Container.Singleton).
 6. Use derrors.New(op, sentinel, msg) for domain errors.
-7. IDs use valueobjects.ID — call valueobjects.NewIDStr() or NewIDUint().
-8. Vector search uses driven.VectorRepository[entities.Document] — float32 embeddings.
+7. IDs use valueobjects.ID - call valueobjects.NewIDStr() or NewIDUint().
+8. Vector search uses driven.VectorRepository[entities.Document] - float32 embeddings.
 INSTRUCTION -->
 
 ## 📁 Files
@@ -40,9 +40,9 @@ INSTRUCTION -->
 HTTP/gRPC
   └─ DocumentUseCase (driving port)
        └─ DocumentInteractor
-            ├─ DocumentRepository.Create()          — persist
-            ├─ DocumentRepository.SimilaritySearch() — vector nearest-neighbor
-            └─ StorageDriver.Put()                  — file upload (optional)
+            ├─ DocumentRepository.Create()          - persist
+            ├─ DocumentRepository.SimilaritySearch() - vector nearest-neighbor
+            └─ StorageDriver.Put()                  - file upload (optional)
 ```
 
 ## 🔌 Bootstrap Keys
