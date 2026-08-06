@@ -18,14 +18,20 @@ type AppConfig struct {
 }
 
 type DatabaseConfig struct {
-	Driver   string
+	Driver   string // "mysql" | "postgres"
 	Host     string
 	Port     int
 	User     string
 	Password string
 	DBName   string
+
+	// PostgreSQL specific
 	SSLMode  string
 	Timezone string
+
+	// MySQL / MariaDB specific
+	Charset string
+	Loc     string
 }
 
 type StorageConfig struct {
@@ -90,14 +96,14 @@ func LoadConfig() *Config {
 			URL:  "http://localhost:8080",
 		},
 		Database: DatabaseConfig{
-			Driver:   "postgres",
+			Driver:   "mysql",
 			Host:     "localhost",
-			Port:     5432,
-			User:     "rancago",
-			Password: "rancago",
+			Port:     3306,
+			User:     "root",
+			Password: "",
 			DBName:   "rancago_db",
-			SSLMode:  "disable",
-			Timezone: "Asia/Jakarta",
+			Charset:  "utf8mb4",
+			Loc:      "Local",
 		},
 		Storage: StorageConfig{
 			Default: "minio",

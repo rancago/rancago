@@ -102,6 +102,20 @@ func (a *Application) RegisterProviders(providers ...Contracts.ServiceProvider) 
 func (a *Application) RegisterCore() {
 	// ---- Framework-layer providers ----
 	a.RegisterProviders(
+		// Database (MySQL / PostgreSQL via GORM)
+		appProviders.NewDatabaseServiceProvider(appProviders.DBProviderConfig{
+			Driver:   a.Config.Database.Driver,
+			Host:     a.Config.Database.Host,
+			Port:     a.Config.Database.Port,
+			User:     a.Config.Database.User,
+			Password: a.Config.Database.Password,
+			DBName:   a.Config.Database.DBName,
+			Charset:  a.Config.Database.Charset,
+			Loc:      a.Config.Database.Loc,
+			SSLMode:  a.Config.Database.SSLMode,
+			Timezone: a.Config.Database.Timezone,
+			Debug:    a.Config.App.Env != "production",
+		}),
 		appProviders.NewStorageServiceProvider(
 			a.Config.Storage.Default,
 			a.Config.Storage.Disks,
@@ -218,7 +232,7 @@ func (a *Application) RegisterCore() {
 func (a *Application) Boot() {
 	log.Println("[rancago] Core providers booted. Framework + internal adapters wired.")
 	log.Printf("[rancago] Auth providers: %v", a.Config.Auth.Providers)
-	log.Printf("[rancago] Storage disks: %s (default: %s)", a.Config.Storage.Disks, a.Config.Storage.Default)
+	log.Printf("[rancago] Storage disks: %v (default: %s)", a.Config.Storage.Disks, a.Config.Storage.Default)
 }
 
 // BuildHTTPServer builds and returns a configured *http.Server.

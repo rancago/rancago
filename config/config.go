@@ -27,16 +27,23 @@ type AppConfig struct {
 	URL  string
 }
 
-// DatabaseConfig holds PostgreSQL connection settings.
+// DatabaseConfig holds database connection settings.
+// Supported drivers: "mysql" (or "mariadb") and "postgres".
 type DatabaseConfig struct {
-	Driver   string
+	Driver   string // "mysql" | "postgres"
 	Host     string
 	Port     int
 	User     string
 	Password string
 	DBName   string
+
+	// PostgreSQL specific
 	SSLMode  string
 	Timezone string
+
+	// MySQL / MariaDB specific
+	Charset string // default: utf8mb4
+	Loc     string // default: Local
 }
 
 // StorageConfig mirrors the Contracts.StorageManager config.
@@ -77,14 +84,19 @@ func Load() *Config {
 			URL:  "http://localhost:8080",
 		},
 		Database: DatabaseConfig{
-			Driver:   "postgres",
+			Driver:   "mysql",
 			Host:     "localhost",
-			Port:     5432,
-			User:     "rancago",
-			Password: "rancago",
+			Port:     3306,
+			User:     "root",
+			Password: "",
 			DBName:   "rancago_db",
-			SSLMode:  "disable",
-			Timezone: "Asia/Jakarta",
+			Charset:  "utf8mb4",
+			Loc:      "Local",
+			// Uncomment below to use PostgreSQL instead:
+			// Driver:   "postgres",
+			// Port:     5432,
+			// SSLMode:  "disable",
+			// Timezone: "Asia/Jakarta",
 		},
 		Storage: StorageConfig{
 			Default: "minio",
